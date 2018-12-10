@@ -45,7 +45,7 @@ export default (function ($) {
     if (this.arc.toProgress < 100) {
       let target = this.arc.a.x < this.arc.b.x ? this.arc.a : this.arc.b;
       // Animate line filling in
-      var d = dTheta * this.arc.toProgress;
+      let d = dTheta * this.arc.toProgress;
       this.arc.toProgress += 2;
       this.context.strokeStyle = target.color;
       this.context.arc(
@@ -58,7 +58,7 @@ export default (function ($) {
     } else if (this.arc.fromProgress < 100) {
       let target = this.arc.a.x > this.arc.b.x ? this.arc.a : this.arc.b;
       // Animate line leaving
-      var d = dTheta * this.arc.fromProgress;
+      let d = dTheta * this.arc.fromProgress;
       this.arc.fromProgress += 2;
       this.context.strokeStyle = target.color;
       this.context.arc(
@@ -156,8 +156,7 @@ export default (function ($) {
     } else {
       return Math.min(direction * lowerBound, velocity);
     }
-
-    return Math.max(0.2, (Math.random() < 0.5 ? 1 : -1) * Math.random() * velocity);
+    // return Math.max(0.2, (Math.random() < 0.5 ? 1 : -1) * Math.random() * velocity);
   }
 
   function Arc (a, b) {
@@ -205,7 +204,8 @@ export default (function ($) {
     this.x = x;
     this.y = y;
     this.originalX = x;
-    this.d = Math.max(5, Math.random() * MAX_DIAMETER);
+    this.dMax = Math.max(5, Math.random() * MAX_DIAMETER);
+    this.d = 0;
     this.dy = generateRandomVelocity(VELOCITY);
     this.color = color;
     this.speed = 1000 + Math.random() * 1000;
@@ -214,8 +214,12 @@ export default (function ($) {
 
   Dot.prototype.updatePosition = function (timestamp) {
     this.x = this.wander * Math.sin(timestamp / this.speed) + this.originalX;
-    // this.x += this.dx;
     this.y += this.dy;
+
+    // Grow from a collapsed dot
+    if (this.d < this.dMax) {
+      this.d = Math.min(this.dMax, this.d += 0.25);
+    }
   };
 
   function buildCanvas (element) {

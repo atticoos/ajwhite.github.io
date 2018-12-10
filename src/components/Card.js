@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 
 const Card = styled.div({
+  position: 'relative',
   padding: 20,
   backgroundColor: 'rgba(255, 255, 255, 0.8)',
   display: 'flex',

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 
-import Header from './header'
+// import Header from './header'
 import './layout.css'
 
 const Layout = ({children, above}) => (
@@ -15,13 +15,18 @@ const Layout = ({children, above}) => (
       ]}
     >
       <html lang="en" />
+      <link href="https://fonts.googleapis.com/css?family=Raleway:400,600|Open+Sans:400,300,700,600" rel="stylesheet" type="text/css" />
+      <style type="text/css">{`
+        html,body {
+          font-family: 'Open Sans', sans-serif;
+        }
+      `}</style>
     </Helmet>
     {above}
     <div style={{position: 'relative'}}>
-      <Header siteTitle="Atticus White" />
+      {/* <Header siteTitle="Atticus White" /> */}
       <div>
         {children}
-        <div>footer</div>
       </div>
     </div>
   </>
