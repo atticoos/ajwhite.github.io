@@ -25,7 +25,7 @@ export default function Work (props) {
           backgroundColor: 'transparent'
         }}
       />
-      <Content>
+      <Section.Content>
         <Section.Title>I love building products</Section.Title>
         <Row style={{justifyContent: 'space-around'}}>
           <div>
@@ -34,7 +34,7 @@ export default function Work (props) {
                 job={job}
                 key={i}
                 active={i === 0}
-                style={{marginBottom: 32}}
+                style={{marginBottom: 18}}
               />
             ))}
           </div>
@@ -45,7 +45,7 @@ export default function Work (props) {
             />
           </div>
         </Row>
-      </Content>
+      </Section.Content>
     </Section>
   )
 }

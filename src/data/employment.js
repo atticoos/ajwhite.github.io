@@ -30,8 +30,20 @@ module.exports = [
   },
   {
     image: 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/terminal-512.png',
+    title: 'CampusLIVE',
+    subtitle: 'Web Developer Intern',
+    date: 2010
+  },
+  {
+    image: 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/terminal-512.png',
     title: 'Contracting',
     subtitle: 'Web Developer',
     date: 2008
+  },
+  {
+    image: 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/terminal-512.png',
+    title: 'High School',
+    subtitle: 'Campus Webmaster',
+    date: 2007
   }
 ]

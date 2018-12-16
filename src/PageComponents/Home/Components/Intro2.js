@@ -2,6 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import TextLoop from 'react-text-loop';
 import Row from 'Components/Row';
+import Section from '../Section'
 
 const Colors = {
   // YELLOW: '#F8E9A1',
@@ -17,6 +18,7 @@ export default function Intro2 () {
   const years = new Date().getFullYear() - 2008;
   return (
     <Container>
+      <Section.Content narrow>
       <p>
         I'm <Loud>Atticus White</Loud>,
         a Boston based
@@ -44,6 +46,7 @@ export default function Intro2 () {
       </p>
 
       <Social />
+      </Section.Content>
     </Container>
   )
 }
@@ -89,8 +92,9 @@ const Social = () => (
 const MockSocialIcon = styled.div({
   height: 32,
   width: 32,
-  borderRadius: '50%',
-  backgroundColor: 'lightgray',
+  borderRadius: 4, //'50%',
+  // backgroundColor: 'lightgray',
+  border: '3px solid lightgray',
   marginRight: 8,
-  opacity: 0.5
+  // opacity: 1
 })

@@ -9,7 +9,7 @@ export default function Learning () {
   return (
     <Section color={Colors.RED}>
       <Section.Title>I love learning</Section.Title>
-      <Content>
+      <Section.Content narrow>
         <Description>
           <p>
             I learn by doing, and I enjoy sharing what I learn with others through <b>writing</b>, <b>speaking</b>, and <b>mentoring</b>.
@@ -19,7 +19,7 @@ export default function Learning () {
             Few were remarkable. Those few are on <b>NPM</b> and receive over <b>1M</b> total downloads.
           </p>
         </Description>
-      </Content>
+      </Section.Content>
     </Section>
   )
 }
