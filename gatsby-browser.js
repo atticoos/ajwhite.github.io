@@ -5,3 +5,6 @@
  */
 
 // You can delete this file if you're not using it
+
+// https://www.gatsbyjs.org/packages/gatsby-remark-prismjs/#include-css
+require("prismjs/themes/prism-solarizedlight.css")
