@@ -1,0 +1,115 @@
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/app.319712d3e7fffa8163a7.css">code[class*=language-],pre[class*=language-]{color:#657b83;font-family:Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-ms-hyphens:none;hyphens:none}code[class*=language-]::-moz-selection,code[class*=language-] ::-moz-selection,pre[class*=language-]::-moz-selection,pre[class*=language-] ::-moz-selection{background:#073642}code[class*=language-]::selection,code[class*=language-] ::selection,pre[class*=language-]::selection,pre[class*=language-] ::selection{background:#073642}pre[class*=language-]{padding:1em;margin:.5em 0;overflow:auto;border-radius:.3em}:not(pre)>code[class*=language-],pre[class*=language-]{background-color:#fdf6e3}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em}.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#93a1a1}.token.punctuation{color:#586e75}.namespace{opacity:.7}.token.boolean,.token.constant,.token.deleted,.token.number,.token.property,.token.symbol,.token.tag{color:#268bd2}.token.attr-name,.token.builtin,.token.char,.token.inserted,.token.selector,.token.string,.token.url{color:#2aa198}.token.entity{color:#657b83;background:#eee8d5}.token.atrule,.token.attr-value,.token.keyword{color:#859900}.token.class-name,.token.function{color:#b58900}.token.important,.token.regex,.token.variable{color:#cb4b16}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}</style><meta name="generator" content="Gatsby 2.0.53"/><style data-emotion-css=""></style><title data-react-helmet="true"></title><link rel="shortcut icon" href="/icons/icon-48x48.png"/><link rel="manifest" href="/manifest.webmanifest"/><meta name="theme-color" content="#663399"/><link as="script" rel="preload" href="/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js"/><link as="script" rel="preload" href="/app-5f862d30c389b7e33f69.js"/><link as="script" rel="preload" href="/webpack-runtime-aec8d6ecca58d5cf01b4.js"/><link rel="preload" href="/static/d/855/path---blog-angular-unit-test-memory-problems-628-bf6-ggMN1zF29qWxTjAEHFVtxYhihE.json" as="fetch" crossOrigin="use-credentials"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group"><div>Hello World<div><p>Depending on your project, you may reach a point where running your tests consumes an extraordinary amount of memory, or you're heading that way. If you're not sure, take a look at how much memory your test runs consume, you may be surprised. This usually kicks in when you're hitting around 1,000 tests and have a sizable number of controllers, services, and directives. Our test environment is comprised of <a href="http://karma-runner.github.io/0.13/index.html" title="Karma - Spectacular Test Runner" target="_blank">Karma</a>, <a href="https://mochajs.org/" title="Mocha - the fun, simple, flexible Javascript test framework" target="_blank">Mocha</a>, <a href="http://sinonjs.org/" title="Sinon.JS" target="_blank">Sinon-Chai</a>, <a href="https://docs.angularjs.org/api/ngMock" title="AngularJS API ngMock" target="_blank">Angular Mocks</a>, and <a href="http://phantomjs.org/" title="PhantomJS" target="_blank">PhantomJS</a>. This problem recently kicked in for us and were were locked out from passing builds on Travis for the day.</p>
+<img src="/dist/images/blog/angular-unit-test-memory-problems/travis-output.png" alt="PhantomJS crash" />
+<p>We learned that by the end of our tests, PhantomJS's memory footprint was exceeding <strong>2GB</strong>. Ready to pin the problem on PhantomJS, we tried running our tests in FireFox and Chrome, as there had been some mentions of pre 2.0 PhantomJS leaking memory - <a href="https://github.com/angular/material/issues/4734" target="_blank">angular/material#4734</a>, <a href="https://github.com/ariya/phantomjs/issues/12317#issuecomment-64858471" target="_blank">ariya/phantomjs#12317</a>, as a couple examples. The same results were apparent in all environments.
+<img src="/dist/images/blog/angular-unit-test-memory-problems/chrome-task-manager.png" alt="Chrome memory consumption" />
+I was eager to blame this problem on a memory leak, either in my code or with Karma itself, but having to deal with this problem I had the chance to learn a little bit more about the internals of Angular and Angular Mocks.</p>
+<h2>Profiling</h2>
+<p>After restarting Travis five times, I began monitoring the memory usage after each unit. I omitted all my unit tests except for a set of units used profile and observe any patterns. The test is set up as the following:</p>
+<ul>
+<li>Load the angular module before each test</li>
+<li>Call <code>inject()</code> without any services (maybe those were the problem and not getting recycled)</li>
+<li>Run a ton of basic units, and throw in a timeout so there is time to evaluate each step</li>
+</ul>
+<pre><code class="language-javascript">'use strict';
+describe('memory test', function () {
+  beforeEach(module('app'));
+  beforeEach(inject());
+  describe('testing', function () {
+    it ('should grow in memory', function (done) {
+      setTimeout(function () {
+        for (var i = 1; i &#x3C; 100; i++) {
+          var result = Math.pow(i, 2);
+          expect(result).to.be.eql(Math.pow(i, 2));
+        }
+        done();
+      }, 500);
+    });
+    // repeat the above unit 500 times
+  });
+});
+</code></pre>
+<p>I watched every unit tick by with more and more memory being consumed even without my tests doing anything exceptional, and without executing any application code or injecting any services that may be leaking:</p>
+<img src="/dist/images/blog/angular-unit-test-memory-problems/profile-1.gif" alt="Memory usage round 1" />
+<p>My next move was to remove <code>beforeEach(module('name'))</code> and see if this changes my memory footprint. It didn't really.</p>
+<pre><code class="language-js">'use strict';
+describe('memory test', function () {
+  // beforeEach(module('app'));
+  beforeEach(inject());
+  describe('testing', function () {
+    it ('should grow in memory', function (done) {
+      setTimeout(function () {
+        for (var i = 1; i &#x3C; 100; i++) {
+          var result = Math.pow(i, 2);
+          expect(result).to.be.eql(Math.pow(i, 2));
+        }
+        done();
+      }, 500);
+    });
+    // repeat 500 times
+  });
+});
+</code></pre>
+<img src="/dist/images/blog/angular-unit-test-memory-problems/profile-2.gif" alt="Memory usage round 2" />
+<p>As nothing changed, my last attempt was to remove the <code>inject</code> call.</p>
+<pre><code class="language-js">'use strict';
+describe('memory test', function () {
+  // beforeEach(module('app'));
+  // beforeEach(inject());
+  describe('testing', function () {
+    it ('should grow in memory', function (done) {
+      setTimeout(function () {
+        for (var i = 1; i &#x3C; 100; i++) {
+          var result = Math.pow(i, 2);
+          expect(result).to.be.eql(Math.pow(i, 2));
+        }
+        done();
+      }, 500);
+    });
+    // repeat 500 times
+  });
+});
+</code></pre>
+<img src="/dist/images/blog/angular-unit-test-memory-problems/profile-3.gif" alt="Memory round 3" />
+<p>And there we had it. My memory didn't move, and if it did by the last few tests, it quickly dropped back down to 119MB. It became clear that when we call <code>inject</code>, things were being created and they weren't being recycled. I dove into the source code for angular mocks, which defines <code>window.inject</code>, but it was nothing more than a <a href="https://github.com/angular/angular.js/blob/472d076cca2ffb99bd87d3c026ef69afc713268d/src/ngMock/angular-mocks.js#L2400-L2443" target="_blank">wrapper for <code>angular.injector</code> and <code>$injector.invoke</code></a>, which produces the <a href="https://docs.angularjs.org/api/auto/service/$injector" target="_blank"><code>$injector</code></a> service and resolves the dependencies.</p>
+<p>It's basically an easy way to do:</p>
+<pre><code class="language-js">var injector = angular.injector(['ng', 'app']]);
+injector.invoke(function (ServiceA, ServiceB, ..) {
+  // your injected services
+});
+</code></pre>
+<p>It seemed as if the problem was out of our hands.</p>
+<h2>Solution</h2>
+<p>As we clearly don't want to muck around with the internals of angular and its most important service, <code>$injector</code>, we decided to do the easy thing. The "easy thing" is usually what an engineer may overlook.</p>
+<p>We split up our unit tests into multiple runs. Instead of one giant run, we had a handful of runs:</p>
+<pre><code class="language-js">//..
+karma: {
+  controllers: {
+    configFile: 'karma.conf.js',
+    options: {
+      files: karmaFiles.concat(['angular/test/spec/controllers/*.js']),
+      port: 8080,
+      proxies: getKarmaProxies(8080)
+    }
+  },
+  directives: {
+    configFile: 'karma.conf.js',
+    options: {
+      files: karmaFiles.concat(['angular/test/spec/directives/*.js']),
+      port: 8081,
+      proxies: getKarmaProxies(8081)
+    }
+  },
+  ...
+}
+//..
+grunt.task('unittest', [
+  'karma:controllers',
+  'karma:directives',
+  //..
+]);
+</code></pre>
+<p>As we were no longer limited to a single browser instance that couldn't support all the tests, our units were able to execute in batches without exceeding any memory limits. The tests were broken down into groups that ran separately -- controllers, directives, services, etc. We updated our Gruntfile to add a handful of new rules to Karma, threw up a build on Travis, and watched it successfully build without failing.</p>
+<h2>Lessons &#x26; Moving Forward</h2>
+<p>If your tests are growing too large for your environments to handle, break them up into multiple runs.</p>
+<p>Also consider this rule for your angular module itself. We currently have things living in one big house, when they should really be broken down into different modules ('app.services', 'app.controllers', etc). This provides for a much lighter footprint when <code>module()</code> and <code>inject()</code> get called with angular mocks. It will produce a much lighter object, rather than carrying the entire weight of the application. This will be one of the next chores we do for improving our test environment.</p>
+<p>I hope this helps someone trying to narrow down their problem. If you've solved this problem another way, I'd love to hear what you did below in the comments.</p></div></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.page={"componentChunkName":"component---src-page-components-posts-post-js","jsonName":"blog-angular-unit-test-memory-problems-628","path":"/blog/angular-unit-test-memory-problems"};window.dataPath="855/path---blog-angular-unit-test-memory-problems-628-bf6-ggMN1zF29qWxTjAEHFVtxYhihE";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app.319712d3e7fffa8163a7.css","/app-5f862d30c389b7e33f69.js"],"component---src-page-components-posts-post-js":["/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js"],"component---src-pages-404-js":["/component---src-pages-404-js.a82bc48cfa31deea5b5f.css","/component---src-pages-404-js-1d8ef4bfd6950bd882e3.js"],"component---src-pages-index-js":["/component---src-pages-index-js.a82bc48cfa31deea5b5f.css","/component---src-pages-index-js-6623fc1c7954d7e08157.js"],"component---src-pages-page-2-js":["/component---src-pages-page-2-js.a82bc48cfa31deea5b5f.css","/component---src-pages-page-2-js-8b55a05b5c2fbefdcf8b.js"]};/*]]>*/</script><script src="/webpack-runtime-aec8d6ecca58d5cf01b4.js" async=""></script><script src="/app-5f862d30c389b7e33f69.js" async=""></script><script src="/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js" async=""></script></body></html>

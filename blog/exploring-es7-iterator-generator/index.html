@@ -1,0 +1,57 @@
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/app.319712d3e7fffa8163a7.css">code[class*=language-],pre[class*=language-]{color:#657b83;font-family:Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-ms-hyphens:none;hyphens:none}code[class*=language-]::-moz-selection,code[class*=language-] ::-moz-selection,pre[class*=language-]::-moz-selection,pre[class*=language-] ::-moz-selection{background:#073642}code[class*=language-]::selection,code[class*=language-] ::selection,pre[class*=language-]::selection,pre[class*=language-] ::selection{background:#073642}pre[class*=language-]{padding:1em;margin:.5em 0;overflow:auto;border-radius:.3em}:not(pre)>code[class*=language-],pre[class*=language-]{background-color:#fdf6e3}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em}.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#93a1a1}.token.punctuation{color:#586e75}.namespace{opacity:.7}.token.boolean,.token.constant,.token.deleted,.token.number,.token.property,.token.symbol,.token.tag{color:#268bd2}.token.attr-name,.token.builtin,.token.char,.token.inserted,.token.selector,.token.string,.token.url{color:#2aa198}.token.entity{color:#657b83;background:#eee8d5}.token.atrule,.token.attr-value,.token.keyword{color:#859900}.token.class-name,.token.function{color:#b58900}.token.important,.token.regex,.token.variable{color:#cb4b16}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}</style><meta name="generator" content="Gatsby 2.0.53"/><style data-emotion-css=""></style><title data-react-helmet="true"></title><link rel="shortcut icon" href="/icons/icon-48x48.png"/><link rel="manifest" href="/manifest.webmanifest"/><meta name="theme-color" content="#663399"/><link as="script" rel="preload" href="/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js"/><link as="script" rel="preload" href="/app-5f862d30c389b7e33f69.js"/><link as="script" rel="preload" href="/webpack-runtime-aec8d6ecca58d5cf01b4.js"/><link rel="preload" href="/static/d/909/path---blog-exploring-es-7-iterator-generator-4-cb-fbe-i9PLDNIdruTc8yF99Sjm7BaJCfU.json" as="fetch" crossOrigin="use-credentials"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group"><div>Hello World<div><p>When I first heard of ES7 generators, it took me a couple cycles of reading to understand the idea behind them. Once you have that "ah Ha!" moment, you can see all the things you could potentially do with them. I always it helpful to relate something new to something you already understand, so let's see how we can use generators to solve problems that we face today.</p>
+<h2>What is a generator?</h2>
+<p>A generator is basically a function with a different type of <code>return</code>. Instead of returning values, it <em>produces</em>, or <em>yeilds</em> a value whenever <code>next()</code> is called. A generator's code block runs until the first <code>yield</code> line. That line only gets executed when <code>next()</code> is called. When <code>next()</code> is called, whatever value is yielded is given to next and the code continues to run until the next <code>yeild</code> is reached, or otherwise completes. When you call a generator, it returns you an <em>instance</em> of the generator, similar to how you might call <code>new FunctionName()</code>.</p>
+<p>For example, this will <code>yield</code> two values, <code>a</code> and then <code>b</code>, and then it will be done:
+{% highlight javascript %}
+function* example() {
+yield 'a';
+yield 'b';
+}</p>
+<p>var instance = example();
+console.log(instance.next()) // {value: 'a', done: false}
+console.log(instance.next()) // {value: 'b', done: false}
+console.log(instance.next()) // {value: undefined, done: true}
+{% endhighlight %}</p>
+<p>In other examples, you can <code>yield</code> inside a loop. In the example below, we have a generator that produces an identifier. Since the <code>yield</code> lives in an infinite loop, it will always produce a <code>next()</code> value.</p>
+<p>{% highlight javascript%}
+function* idGenerator() {
+var id = 0;
+while (true) {
+yield ++id;
+}
+}
+{% endhighlight %}</p>
+<p>There's 2 important things to recognize about how this is written, and one important thing to understand.</p>
+<ol>
+<li>We define a generator with a <code>*</code>, <code>function*</code></li>
+<li>We <code>yield</code> the result, this will be returned whenever we call <code>next()</code> on the generator. This is like <code>return</code>, except a generator doesn't exactly return a value when you call it, it returns a "new" instance of the generator, which we will describe in 3.</li>
+<li>The scope of the generator, where <code>id</code> starts at <code>0</code>, is retained and doesn't "end". If this were a typical function, we'd get the next value up from <code>0</code>, which would be <code>1</code>. The next time we call it, we'd get the same thing, since <code>id</code> is initialized inside the scope of the function.</li>
+</ol>
+<p>I want us to understand point 3. When you create a generator, it returns to you an <em>instance</em> of that generator, which will retain the scope. Let's look at how this will behave:</p>
+<p>{% highlight javascript%}
+var generatorInstance = idGenerator();
+console.log(generatorInstance.next()) // {value: 1, done: false}
+console.log(generatorInstance.next()) // {value: 2, done: false}
+console.log(generatorInstance.next()) // {value: 3, done: false}
+// to infinity and beyond
+{% endhighlight %}</p>
+<h2>Creating an interable interface to an array.</h2>
+<p>In other languages, such as Java, lists can generate iterable interfaces, such as, <code>(List) myList.iterator()</code>. With ES6, we can do the same thing.</p>
+<p>{% highlight javascript%}
+function* iterable(list) {
+var index = 0;
+while (index &#x3C; list.length) {
+yield list[index++];
+}
+}
+{% endhighlight %}</p>
+<p>This will provide a similar iterator interface that you'd expect from other languages.</p>
+<p>{% highlight javascript%}
+var list = ['a', 'b', 'c', 'd', 'e'];
+var iterator = iterable(list);</p>
+<p>var item;
+while (!(item = iterator.next()).done) {
+console.log(item.value);
+}
+{% endhighlight %}</p>
+<p>This example is used from <a href="https://github.com/ajwhite/iterator-generator" target="_blank" title="Iterator Generator">iterator-generator</a>.</p></div></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.page={"componentChunkName":"component---src-page-components-posts-post-js","jsonName":"blog-exploring-es-7-iterator-generator-4cb","path":"/blog/exploring-es7-iterator-generator"};window.dataPath="909/path---blog-exploring-es-7-iterator-generator-4-cb-fbe-i9PLDNIdruTc8yF99Sjm7BaJCfU";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app.319712d3e7fffa8163a7.css","/app-5f862d30c389b7e33f69.js"],"component---src-page-components-posts-post-js":["/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js"],"component---src-pages-404-js":["/component---src-pages-404-js.a82bc48cfa31deea5b5f.css","/component---src-pages-404-js-1d8ef4bfd6950bd882e3.js"],"component---src-pages-index-js":["/component---src-pages-index-js.a82bc48cfa31deea5b5f.css","/component---src-pages-index-js-6623fc1c7954d7e08157.js"],"component---src-pages-page-2-js":["/component---src-pages-page-2-js.a82bc48cfa31deea5b5f.css","/component---src-pages-page-2-js-8b55a05b5c2fbefdcf8b.js"]};/*]]>*/</script><script src="/webpack-runtime-aec8d6ecca58d5cf01b4.js" async=""></script><script src="/app-5f862d30c389b7e33f69.js" async=""></script><script src="/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js" async=""></script></body></html>

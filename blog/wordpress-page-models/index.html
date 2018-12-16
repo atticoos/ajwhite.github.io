@@ -1,0 +1,123 @@
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/app.319712d3e7fffa8163a7.css">code[class*=language-],pre[class*=language-]{color:#657b83;font-family:Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-ms-hyphens:none;hyphens:none}code[class*=language-]::-moz-selection,code[class*=language-] ::-moz-selection,pre[class*=language-]::-moz-selection,pre[class*=language-] ::-moz-selection{background:#073642}code[class*=language-]::selection,code[class*=language-] ::selection,pre[class*=language-]::selection,pre[class*=language-] ::selection{background:#073642}pre[class*=language-]{padding:1em;margin:.5em 0;overflow:auto;border-radius:.3em}:not(pre)>code[class*=language-],pre[class*=language-]{background-color:#fdf6e3}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em}.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#93a1a1}.token.punctuation{color:#586e75}.namespace{opacity:.7}.token.boolean,.token.constant,.token.deleted,.token.number,.token.property,.token.symbol,.token.tag{color:#268bd2}.token.attr-name,.token.builtin,.token.char,.token.inserted,.token.selector,.token.string,.token.url{color:#2aa198}.token.entity{color:#657b83;background:#eee8d5}.token.atrule,.token.attr-value,.token.keyword{color:#859900}.token.class-name,.token.function{color:#b58900}.token.important,.token.regex,.token.variable{color:#cb4b16}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}</style><meta name="generator" content="Gatsby 2.0.53"/><style data-emotion-css=""></style><title data-react-helmet="true"></title><link rel="shortcut icon" href="/icons/icon-48x48.png"/><link rel="manifest" href="/manifest.webmanifest"/><meta name="theme-color" content="#663399"/><link as="script" rel="preload" href="/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js"/><link as="script" rel="preload" href="/app-5f862d30c389b7e33f69.js"/><link as="script" rel="preload" href="/webpack-runtime-aec8d6ecca58d5cf01b4.js"/><link rel="preload" href="/static/d/368/path---blog-wordpress-page-models-074-3ef-47qtMhAOUVofesGXogruINACa1w.json" as="fetch" crossOrigin="use-credentials"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group"><div>Hello World<div><p>If you've developed a WordPress project before, then you've likely used <a title="Wordpress Custom Post Types" href="http://codex.wordpress.org/Post_Types" target="_blank">custom post types</a> coupled with <a title="Advanced Custom Fields" href="http://www.advancedcustomfields.com/" target="_blank">custom fields</a>. These are terrific for making a vanilla WordPress installation capable of managing all the dynamic pieces that make up a page that a client may require. You can keep things easy to use and organized for your client on the backend, but your code is usually a different story.</p>
+<p>Custom fields are terrific, but you frequently end up littering your markup with many inline PHP get_field requests, checking conditionals, applying filters, etc. You should minimize this and maximize your separation of responsibility as much as possible. I've recently started doing this by creating data models for my pages.</p>
+<p>Let's take a look at an example home page:</p>
+<img src="/dist/images/blog/wordpress-page-models/custom-fields.png" alt="Advanced Custom Fields" />
+<p>We have a handful of fields that will represent different parts of the page.</p>
+<ul>
+<li>Top banner section</li>
+<li>Featured content section</li>
+<li>Bottom banner section</li>
+</ul>
+<p>Our markup could easily end up looking like so:</p>
+<p>{% highlight html %}</p>
+<div class="something">
+  <?php
+    $bannerImage = get_field('top_banner_image');
+    if (empty($bannerImage)) {
+      $bannerImage = get_field('default_banner_image', 'option');
+    }
+  ?>
+  <header style="background-image: url(<?php echo $bannerImage; ?>)">
+    <h1><?php the_field('top_title'); ?></h1>
+    <p><?php the_field('top_excerpt'); ?></p>
+  </header>
+  <section>
+    <?php while(have_rows('featured_items')) : the_row();
+      $itemOne = get_sub_field('item1');
+      $itemTwo = get_sub_field('item2');
+      $itemThree = get_sub_field('item3');
+    ?>
+    <div>
+      <h2><?php echo $itemOne; ?></h2>
+      <p><?php echo $itemTwo; ?></p>
+      <span><?php echo $itemThree; ?></span>
+    </div>
+    <?php endwhile; ?>
+  </section>
+  <footer>
+    <h1><?php the_field('bottom_title'); ?></h1>
+    <p><?php the_field('bottom_excerpt'); ?></p>
+  </footer>
+</div>
+{% endhighlight %}
+<p>This is where I like to introduce a data model to the page that does all the data gathering and preparation before using it in my view. Coming from a software background, this feels a lot cleaner than mixing it all together. The model looks like so:</p>
+<p>{% highlight php %}</p>
+<?php
+
+class WP_PageModel {
+  function __construct ($postID = false) {
+    global $post;
+    $this->postID = $postID ? $postID : $post->ID;
+  }
+
+  protected function fillModelAttributes(&$attribute, $data) {
+    $attribute = new stdClass();
+    foreach ($data as $key=>$value) {
+      $attribute->$key = $data;
+    }
+  }
+}
+
+class HomePageModel extends WP_PageModel {
+  var $top;
+  var $features;
+  var $bottom;
+
+  function __construct ($postID = false) {
+    parent::__construct($postID);
+    $this->fetchTop();
+    $this->fetchFeatures();
+    $this->fetchBottom();
+  }
+
+  function fetchTop () {
+    $image = get_field('top_background_image');
+    $image = !empty($image) ? $image : get_field('default_banner_image', 'option');
+    $topModel = array (
+      'image' => $image,
+      'heading' => get_field('top_title', $this->postID),
+      'excerpt' => get_field('top_excerpt', $this->postID))
+    );
+    $this->fillModelAttributes($this->top, $topModel);
+  }
+
+  function  fetchFeaturedItems () {
+    $this->fillModelAttributes($this->featuredItems, array(
+      'items' => get_field('featured_items', $this->postID);
+    ));
+  }
+
+  function fetchBottom () {
+    $bottomModel = array (
+      'heading' => get_field('heading_bottom', $this->postID),
+      'excerpt' => get_field('excerpt_bottom', $this->postID)
+    );
+    $this->fillModelAttributes($this->bottom, $bottomModel);
+  }
+}
+{% endhighlight %}
+
+We end up building an object that has the properties for each section: top, featuredContent, bottom. We now have easy access to these properties to spit out and repeat over in our markups.
+
+{% highlight html %}
+<?php $page = new HomePageModel(); ?>
+<div class="something">
+  <header style="background-image: url(<?php echo $page->top->image; ?>)">
+    <h1><?php echo $page->top->title; ?></h1>
+    <p><?php echo $page->top->excerpt; ?></p>
+  </header>
+  <section>
+    <?php foreach($page->featuredItems as $item): ?>
+    <div>
+      <h2><?php echo $item['item1']; ?></h2>
+      <p><?php echo $item['item2']; ?></p>
+      <span><?php echo $item['item3']; ?></span>
+    </div>
+    <?php endforeach; ?>
+  </section>
+  <footer>
+    <h1><?php echo $page->bottom->title ?></h1>
+    <p><?php echo $page->bottom->excerpt; ?>
+  </footer>
+</div>
+{% endhighlight %}</div></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.page={"componentChunkName":"component---src-page-components-posts-post-js","jsonName":"blog-wordpress-page-models-074","path":"/blog/wordpress-page-models"};window.dataPath="368/path---blog-wordpress-page-models-074-3ef-47qtMhAOUVofesGXogruINACa1w";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app.319712d3e7fffa8163a7.css","/app-5f862d30c389b7e33f69.js"],"component---src-page-components-posts-post-js":["/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js"],"component---src-pages-404-js":["/component---src-pages-404-js.a82bc48cfa31deea5b5f.css","/component---src-pages-404-js-1d8ef4bfd6950bd882e3.js"],"component---src-pages-index-js":["/component---src-pages-index-js.a82bc48cfa31deea5b5f.css","/component---src-pages-index-js-6623fc1c7954d7e08157.js"],"component---src-pages-page-2-js":["/component---src-pages-page-2-js.a82bc48cfa31deea5b5f.css","/component---src-pages-page-2-js-8b55a05b5c2fbefdcf8b.js"]};/*]]>*/</script><script src="/webpack-runtime-aec8d6ecca58d5cf01b4.js" async=""></script><script src="/app-5f862d30c389b7e33f69.js" async=""></script><script src="/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js" async=""></script></body></html>

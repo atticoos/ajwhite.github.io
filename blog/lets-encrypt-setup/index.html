@@ -1,0 +1,114 @@
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/app.319712d3e7fffa8163a7.css">code[class*=language-],pre[class*=language-]{color:#657b83;font-family:Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-ms-hyphens:none;hyphens:none}code[class*=language-]::-moz-selection,code[class*=language-] ::-moz-selection,pre[class*=language-]::-moz-selection,pre[class*=language-] ::-moz-selection{background:#073642}code[class*=language-]::selection,code[class*=language-] ::selection,pre[class*=language-]::selection,pre[class*=language-] ::selection{background:#073642}pre[class*=language-]{padding:1em;margin:.5em 0;overflow:auto;border-radius:.3em}:not(pre)>code[class*=language-],pre[class*=language-]{background-color:#fdf6e3}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em}.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#93a1a1}.token.punctuation{color:#586e75}.namespace{opacity:.7}.token.boolean,.token.constant,.token.deleted,.token.number,.token.property,.token.symbol,.token.tag{color:#268bd2}.token.attr-name,.token.builtin,.token.char,.token.inserted,.token.selector,.token.string,.token.url{color:#2aa198}.token.entity{color:#657b83;background:#eee8d5}.token.atrule,.token.attr-value,.token.keyword{color:#859900}.token.class-name,.token.function{color:#b58900}.token.important,.token.regex,.token.variable{color:#cb4b16}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}</style><meta name="generator" content="Gatsby 2.0.53"/><style data-emotion-css=""></style><title data-react-helmet="true"></title><link rel="shortcut icon" href="/icons/icon-48x48.png"/><link rel="manifest" href="/manifest.webmanifest"/><meta name="theme-color" content="#663399"/><link as="script" rel="preload" href="/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js"/><link as="script" rel="preload" href="/app-5f862d30c389b7e33f69.js"/><link as="script" rel="preload" href="/webpack-runtime-aec8d6ecca58d5cf01b4.js"/><link rel="preload" href="/static/d/405/path---blog-lets-encrypt-setup-0-fc-81d-NsL3Dmxl8vtulzfXCiQAl1IvqM.json" as="fetch" crossOrigin="use-credentials"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group"><div>Hello World<div><p>Let's Encrypt has opened the floodgates of their public beta today, December 4th 2015. Today marks a milestone towards encrypting the web. In this post we'll look at how to use this new tool to generate a free SSL certificate.</p>
+<img src="/dist/images/blog/lets-encrypt-setup/encrypted.png" alt="SSL activated" />
+<p>This article assumes you have a web server and Apache. You're also going to want to have two SSH windows open, as the generator will have a few prompts and instructions to set up verification.</p>
+<p>The workflow is broken into 3 segments:</p>
+<ol>
+<li>Choosing a domain to create a certificate for</li>
+<li>Verifying the domain</li>
+<li>Configuring Apache to serve your site over SSL</li>
+</ol>
+<h2>Installing the <code>letsencrypt</code> CLI tool</h2>
+<p><code>ssh</code> into your server and clone the <code>letsencrypt</code> repository in your home directory and navigate into it.</p>
+<p>{%highlight shell-session %}
+git clone git@github.com:letsencrypt/letsencrypt.git
+cd letsencrypt
+{% endhighlight %}</p>
+<h2>Requesting a certificate</h2>
+<p>In the cloned repository exists a script <code>letsencrypt-auto</code>. This typically will automatically generate a certificate and configure your web server. I tend to lean towards manually doing things, especially in beta. That turned out to be a good thing since it indeed failed for me <a href="https://github.com/letsencrypt/letsencrypt/issues/1712" title="Error installing Apache2 certificates" target="_blank">letsencrypt#1712</a></p>
+<p>We'll go ahead and start the manual flow</p>
+<p>{% highlight 	shell-session %}
+./letsencrypt certonly --manual
+{% endhighlight %}</p>
+<p>If this is the first time running the command, it will go ahead and download all the necessary packages. Let it run for a minute while it does that. You'll next be prompted to type in your <code>sudo</code> password.</p>
+<p>Upon allowing root access, you'll enter a GUI flow of providing the domain(s) you'd like to generate certificates for</p>
+<img src="/dist/images/blog/lets-encrypt-setup/domain-entry.png" alt="enter a domain" />
+<p>This will next let you know that your IP will be publicly logged. Agree, if you're cool with that.</p>
+<h2>Verifying your domain</h2>
+<p>Upon providing your domain name and agreeing that your IP will be logged, you'll now set up the verification. Here you'll want to open a <strong>new</strong> <code>ssh</code> window. This message is a prompt waiting for you to hit <code>ENTER</code> to confirm that you've set things up, so we'll leave this prompt as it is for now.</p>
+<p>You should see output similar to</p>
+<p>{% highlight 	shell-session %}
+Make sure your web server displays the following content at
+<a href="http://atticuswhite.com/.well-known/acme-challenge/THE_VERIFICATION_FILE">http://atticuswhite.com/.well-known/acme-challenge/THE<em>VERIFICATION</em>FILE</a> before continuing:</p>
+<p>THE<em>VERIFICATION</em>STRING</p>
+<p>If you don't have HTTP server configured, you can run the following
+command on the target server (as root):</p>
+<p>mkdir -p /tmp/letsencrypt/public<em>html/.well-known/acme-challenge
+cd /tmp/letsencrypt/public</em>html
+printf "%s" THE<em>VERIFICATION</em>STRING > .well-known/acme-challenge/THE<em>VERIFICATION</em>FILE</p>
+<h1>run only once per server:</h1>
+<p>$(command -v python2 || command -v python2.7 || command -v python2.6) -c <br>
+"import BaseHTTPServer, SimpleHTTPServer; <br>
+s = BaseHTTPServer.HTTPServer(('', 80), SimpleHTTPServer.SimpleHTTPRequestHandler); <br>
+s.serve_forever()"
+Press ENTER to continue
+{% endhighlight %}</p>
+<p>To summarize, you're going to create a file in your served directory that will be used to verify that you indeed own the location that the domain serves. This article assumes you're setting up an Apache server. If you have yet to set up a served directory, do that now. If you already have a directory that is serving your domain, navigate to that directory and create the following file path:</p>
+<p><code>.well-known/acme-challenge/THE_VERIFICATION_FILE</code> (ofcourse, <code>THE_VERIFICATION_FILE</code> should be what's described in the message from <code>letsencrypt-auto</code>)</p>
+<p>Next you'll want put the verification string into the file.</p>
+<p>{% highlight shell-session %}
+cd /path/to/webserver/directory
+mkdir -p .well-known/acme-challenge/THE<em>VERIFICATION</em>FILE
+printf "%s" THE<em>VERIFICATION</em>STRING > .well-known/acme-challenge/THE<em>VERIFICATION</em>FILE
+{% endhighlight %}</p>
+<p>Verify that this file is properly being served before continuing. Navigate to <a href="http://your-domain.com/.well-known/acme-challenge/THE_VERIFICATION_FILE">http://your-domain.com/.well-known/acme-challenge/THE<em>VERIFICATION</em>FILE</a> and make sure it's outputting the verification string.</p>
+<p>Once you have this confirmed, go back to your other <code>ssh</code> window and confirm the prompt by hitting <code>ENTER</code>.</p>
+<p>If verification was successful, you should receive a confirmation message containing the location of your certificate, chain, and private key file:</p>
+<p>{% highlight text %}
+IMPORTANT NOTES:</p>
+<ul>
+<li>
+<p>Congratulations! Your certificate and chain have been saved at
+/etc/letsencrypt/live/your-domain.com/fullchain.pem. Your cert
+will expire on 2016-03-03. To obtain a new version of the
+certificate in the future, simply run Let's Encrypt again.</p>
+</li>
+<li>
+<p>If like Let's Encrypt, please consider supporting our work by:</p>
+<p>Donating to ISRG / Let's Encrypt:   <a href="https://letsencrypt.org/donate">https://letsencrypt.org/donate</a>
+Donating to EFF:                    <a href="https://eff.org/donate-le">https://eff.org/donate-le</a>
+{% endhighlight %}</p>
+</li>
+</ul>
+<p>Awesome! Now let's setup that cert.</p>
+<h2>Configuring the certificates</h2>
+<p>Head over to your Apache configuration directory. Depending on what version of Apache you're running (Apache or Apache2) these next steps may vary. The overall configuration is the same in the end, however the directory structures are a bit different between the two.</p>
+<p>{% highlight shell-session %}
+cd /etc/apache2
+{% endhighlight %}</p>
+<p>We're going to set up 3 things:</p>
+<ol>
+<li>The SSL mod</li>
+<li>A cache mod</li>
+<li>The SSL configuration</li>
+</ol>
+<p>Inside <code>mods-available</code> will be <code>ssl.conf</code>, <code>ssl.load</code>, and <code>socache_shmcb.load</code>. If they do not exist in <code>mods-enabled</code>, you're going to link them.</p>
+<p>{% highlight shell-session %}
+sudo ln -s mods-available/ssl.conf mods-enabled/ssl.conf
+sudo ln -s mods-available/ssl.load mods-enabled/ssl.load
+sudo ln -s mods-available/socache<em>shmcb.load mods-enabled/socache</em>shmcb.load
+{% endhighlight %}</p>
+<p>That takes care of 1 and 2. Now we'll set up the SSL configuration.</p>
+<p>Let's assume you already have the non SSL configuration set up. If you don't go ahead and set that up, we'll make sure that it redirects to the SSL version below.</p>
+<p>Open the configuration file for the non SSL virtual host and enter the following:</p>
+<p>{% highlight apacheconf %}
+&#x3C;VirtualHost *:443>
+ServerName your-server.com
+DocumentRoot /path/to/your-server
+SSLEngine on
+SSLCertificateFile /etc/letsencrypt/live/your-domain.com/cert.pem
+SSLCertificateKeyFile /etc/letsencrypt/live/your-domain.com/privkey.pem
+SSLCertificateChainFile /etc/letsencrypt/live/your-domain.com/chain.pem
+</VirtualHost>
+{% endhighlight %}</p>
+<p>Go ahead and verify your configuration (<code>service apache2 configtest</code>) or restart your web server, typically <code>service apache2 restart</code>. You should now be able to access your site over SSL!</p>
+<h2>Redirecting non-SSL to your new SSL site</h2>
+<p>In order to do this, you'll need to make sure you have the <code>rewerite</code> mod enabled. If you don't see it in <code>mods-enabled</code>, go ahead and link it:</p>
+<p>{% highlight shell-session %}
+ln -s mods-available/rewrite.load mods-enabled/rewerite.load
+{% endhighlight %}</p>
+<p>In your site configuration, add the following lines:</p>
+<p>{% highlight apacheconf %}
+RewriteEngine On
+RewriteRule ^(.*)$ <a href="https://%25%7BHTTP_HOST%7D$1">https://%{HTTP_HOST}$1</a> [R=301, L]
+{% endhighlight %}</p>
+<p>Voilla! You're now secured. Give a big thanks to the team and community over at <a href="https://twitter.com/letsencrypt" title="Let's Encrypt" target="_blank">@LetsEncrypt</a> and on <a href="https://github.com/letsencrypt/letsencrypt" title="Let's Encrypt on Github" target="_blank">GitHub</a>!</p></div></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.page={"componentChunkName":"component---src-page-components-posts-post-js","jsonName":"blog-lets-encrypt-setup-0fc","path":"/blog/lets-encrypt-setup"};window.dataPath="405/path---blog-lets-encrypt-setup-0-fc-81d-NsL3Dmxl8vtulzfXCiQAl1IvqM";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app.319712d3e7fffa8163a7.css","/app-5f862d30c389b7e33f69.js"],"component---src-page-components-posts-post-js":["/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js"],"component---src-pages-404-js":["/component---src-pages-404-js.a82bc48cfa31deea5b5f.css","/component---src-pages-404-js-1d8ef4bfd6950bd882e3.js"],"component---src-pages-index-js":["/component---src-pages-index-js.a82bc48cfa31deea5b5f.css","/component---src-pages-index-js-6623fc1c7954d7e08157.js"],"component---src-pages-page-2-js":["/component---src-pages-page-2-js.a82bc48cfa31deea5b5f.css","/component---src-pages-page-2-js-8b55a05b5c2fbefdcf8b.js"]};/*]]>*/</script><script src="/webpack-runtime-aec8d6ecca58d5cf01b4.js" async=""></script><script src="/app-5f862d30c389b7e33f69.js" async=""></script><script src="/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js" async=""></script></body></html>

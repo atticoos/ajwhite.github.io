@@ -1,0 +1,109 @@
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/app.319712d3e7fffa8163a7.css">code[class*=language-],pre[class*=language-]{color:#657b83;font-family:Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-ms-hyphens:none;hyphens:none}code[class*=language-]::-moz-selection,code[class*=language-] ::-moz-selection,pre[class*=language-]::-moz-selection,pre[class*=language-] ::-moz-selection{background:#073642}code[class*=language-]::selection,code[class*=language-] ::selection,pre[class*=language-]::selection,pre[class*=language-] ::selection{background:#073642}pre[class*=language-]{padding:1em;margin:.5em 0;overflow:auto;border-radius:.3em}:not(pre)>code[class*=language-],pre[class*=language-]{background-color:#fdf6e3}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em}.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#93a1a1}.token.punctuation{color:#586e75}.namespace{opacity:.7}.token.boolean,.token.constant,.token.deleted,.token.number,.token.property,.token.symbol,.token.tag{color:#268bd2}.token.attr-name,.token.builtin,.token.char,.token.inserted,.token.selector,.token.string,.token.url{color:#2aa198}.token.entity{color:#657b83;background:#eee8d5}.token.atrule,.token.attr-value,.token.keyword{color:#859900}.token.class-name,.token.function{color:#b58900}.token.important,.token.regex,.token.variable{color:#cb4b16}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}</style><meta name="generator" content="Gatsby 2.0.53"/><style data-emotion-css=""></style><title data-react-helmet="true"></title><link rel="shortcut icon" href="/icons/icon-48x48.png"/><link rel="manifest" href="/manifest.webmanifest"/><meta name="theme-color" content="#663399"/><link as="script" rel="preload" href="/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js"/><link as="script" rel="preload" href="/app-5f862d30c389b7e33f69.js"/><link as="script" rel="preload" href="/webpack-runtime-aec8d6ecca58d5cf01b4.js"/><link rel="preload" href="/static/d/190/path---blog-angularjs-translate-once-angular-translate-one-time-binding-610-b63-hyBUR8BjBhadIHLCC3kV6wn6g0.json" as="fetch" crossOrigin="use-credentials"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group"><div>Hello World<div><p>Many of you are likely familiar with Pascal Precht's i18n localization library, <a href="https://github.com/angular-translate/angular-translate" title="AngularJS i18n angular-translate module" target="_blank">angular-translate</a>. It's well made, easy to use, and has a lot of configuration as to how you want to prepare or load your localizations. The only thing it lacks, in my and others opinions, is one-time binding (issues <a href="https://github.com/angular-translate/angular-translate/issues/738" target="_blank">#738</a>, <a href="https://github.com/angular-translate/angular-translate/issues/967" target="_blank">#967</a>, <a href="https://github.com/angular-translate/angular-translate/issues/1018" target="_blank">#1018</a>, and <a href="https://github.com/angular-translate/angular-translate/issues/1043" target="_blank">#1043</a>). This becomes a problem if you asynchronously load your localization files, which is a beneficial tool to large angular applications. Pascal writes about how to <a href="https://github.com/angular-translate/angular-translate/wiki/Asynchronous-loading" target="_blank">asynchronously load your localization files</a>. We personally use <a href="https://github.com/angular-translate/bower-angular-translate-loader-static-files" target="_blank">angular-translate-loader-static-files</a>. While the cost of evaluating translation expressions is relatively inexpensive, we still preferred throwing a one-time binding on it, and since we were early on in the project, I figured we'd provide a solution that could also benefit others in the community.</p>
+<h2>translate-once Directive</h2>
+<p><a href="https://github.com/ajwhite/angular-translate-once"><code>translate-once</code></a> adds support for one-time bindings for translations with a new <code>translate-once</code></a> directive. It extends the existing functionality of <code>angular-translate</code> and doesn't introduce any new dependencies. It is written to be considered an extension within the same namespace as <code>pascalprecht.translate</code>.</p>
+<p>{% highlight html %}
+<span translate-once="TRANSLATION_KEY"></span>
+{% endhighlight %}</p>
+<p>Installation is done via bower, and if you already include the <code>pascalprecht.translate</code> module into your angular project, you'll be good to go.</p>
+<p>{% highlight sh %}
+bower install angular-translate-once
+{% endhighlight %}</p>
+<h2>Why do we need this?</h2>
+<p>There's no good way to perform one-time bindings when asynchronously loading your static localization assets. One-time bindings for translations are useful for any instances of static copy.</p>
+<ul>
+<li>Page titles</li>
+<li>Navigation elements</li>
+<li>Static bylines, paragraphs, explainers, etc</li>
+</ul>
+<p>Let's look at what is currently available in the <code>angular-translate</code> package.</p>
+<p>Use it as a <strong>filter</strong>
+{% highlight html %}
+{{ 'TRANSLATION_KEY' | translate }}
+{% endhighlight %}</p>
+<p>Use it as a <strong>directive</strong>
+{% highlight html %}
+<span translate="TRANSLATION_KEY"></span>
+{% endhighlight %}</p>
+<p>Use it as a **directive with values **
+{% highlight html %}
+<span translate="TRANSLATION_KEY" translate-values="{foo: 'bar'}"></span>
+{% endhighlight %}</p>
+<p>Use it as a <strong>directive and compile</strong> elements formed from the translation
+{% highlight html %}
+<span translate="TRANSLATION_KEY" translate-compile></span>
+{% endhighlight %}</p>
+<p>Or even use it in within javascript in one of two ways:</p>
+<p><strong>Asynchronously</strong>
+{% highlight javascript %}
+$translate('TRANSLATION_KEY').then(function (translation) {
+alert(translation);
+});
+{% endhighlight %}</p>
+<p><strong>Synchronously</strong>
+{% highlight javascript %}
+alert($translate.instant('TRANSLATION_KEY'));
+{% endhighlight %}</p>
+<h2>But what about one-time binding?</h2>
+<p>Let's first look at some approaches one might make with the current toolkit. Intuitively, one might try to do this in how a standard one-time binding would work after <a href="http://blog.thoughtram.io/angularjs/2014/10/14/exploring-angular-1.3-one-time-bindings.html" title="AngularJS 1.3 one-time bindings" target="_blank">Angular 1.3 introduced one-time bindings</a>.</p>
+<p>{% highlight html %}
+<span ng-bind="{{:: 'TRANSLATION_KEY' | translate }}"></span>
+{% endhighlight %}</p>
+<p>Your intuition would lead you to think that the output from this would be a span tag with the translation inside and question why I'm even here writing this post. Unfortunately, that is not the case if you asynchronously load your localization files, as many large applications do. You may be safe after your application has completed any deferred asset loading, but before then, your first page rendered will likely be missing all its one-time bound translations.</p>
+<p>First, let's understand how the filter works. The <code>translate</code> filter's <a href="https://github.com/angular-translate/angular-translate/blob/2.7.2/src/filter/translate.js#L65" target="_blank">definition</a> makes use of the <strong>synchronous</strong> lookup function, <code>$translate.instant</code>, as a filter is by design synchronous. That means <code>$translate.instant</code> is a hit-or-miss lookup, where if the localization is not loaded, it misses and does not return the translation since it doesn't exist. When you use the filter in a binding, it's going to process your string through <code>$translate.instant</code>. This works without one-time bindings because your expression is <strong>reevaluated each digest cycle</strong>, and if there's a change, it triggers the watchers to re-render the output. If <code>$translate.instant('TRANSLATION_KEY')</code> misses the first time, but hits a successive time, that value will have changed and the new value will be rendered to the view.</p>
+<p>When you introduce a one-time binding to the expression, your binding will only exist in the <code>$$watchers</code> once, and then you're done. That means you only get one chance to retrieve a data value to bind, and any successive digest loops will not trigger your update if that value changes (in this case, once the localization becomes loaded and returns the final translation value). So if <code>$translate.instant</code> misses the first time, that's the final value of your binding. You don't get a second chance to lookup the localization entry again to re render the correct value. It's dependent on the digest cycle.</p>
+<h2>How translate-once works</h2>
+<p><code>translate-once</code> makes use of the link function and the asynchronous resolver of <code>$translate()</code>. The directive's <a href="https://github.com/ajwhite/angular-translate-once/blob/v1.0.1/src/translate-once.js#L52-L69" title="Angular one-time binding translate-once source code" target="_blank">link function</a> takes the translation key, looks it up asynchronously with <code>$translate()</code>, and once resolved, writes it to the element. Since the link function only fires once, when the element enters context, it is essentially one-time binding the translation. Of course, if it leaves and re-enters context, perhaps with an <code>ngIf</code> condition going from <code>false</code> and back to <code>true</code>.</p>
+<p>Let's look at how this works:</p>
+<p>{% highlight javascript %}
+function linker (scope, element, attrs) {
+var translateValues = {};
+if (attrs.translateValues) {
+translateValues = $parse(attrs.translateValues)(scope);
+}</p>
+<p>  $translate(attrs.translateOnce, translateValues).then(function (translation) {
+element.html(translation);
+if (attrs.hasOwnProperty('translateCompile')) {
+$compile(element.contents())(scope);
+}
+});
+}
+{% endhighlight %}</p>
+<p>The first thing that happens is a backward compatible step to ensure we expose existing functionality that <code>angular-translate</code> offers -- passing <code>translate-values</code> to be used in dynamic localization entries.</p>
+<p>{% highlight javascript %}
+if (attrs.translateValues) {
+translateValues = $parse(attrs.translateValues)(scope);
+}
+{% endhighlight %}</p>
+<p>We take the <code>translate-values</code> attributes, and <code>$parse</code> it on the shared scope. Note: the scope is not isolated, it is shared with the context the directive exists in, such that when we parse the values, they are parsed in the scope that the expression exists in.</p>
+<p>The second thing that happens is calling <code>$translate()</code>. This asynchronously looks up the localization entry, and once it is available, it resolves with the answer if the entry exists.</p>
+<p>{% highlight javascript %}
+$translate(attrs.translateOnce, translateValues).then(function .. );
+{% endhighlight %}</p>
+<p>We then take the translation value, and set it to the element's content.</p>
+<p>{% highlight javascript %}
+var output = translation;
+if (attrs.hasOwnProperty('translateCompile')) {
+output = $compile(translation)(scope);
+}
+element.html(output);
+{% endhighlight %}</p>
+<p>If the consumer requests that we compile the translation value, as it may contain elements with other bindings, the attribute flag <code>translate-compile</code> can be provided and is used in a backward compatible manner. Then we process the translation through <code>$compile</code> with the shared scope.</p>
+<h2>More one-time binding tools</h2>
+<p>Just as you may want to set the content of an element to a translation value, many times you may want to do this for other attributes on an element, such as</p>
+<ul>
+<li>An <code>&#x3C;input /></code> element's <code>value</code></li>
+<li>An <code>&#x3C;input /></code> text field <code>placeholder</code></li>
+<li>An <code>&#x3C;a /></code> element's <code>title</code> attribute</li>
+<li>An <code>&#x3C;img /></code> element's <code>alt</code> attribute</li>
+<li>etc..</li>
+</ul>
+<p>A similar process takes place for <a href="https://github.com/ajwhite/angular-translate-once/blob/v1.0.1/src/translate-once.js#L29-L40" title="AngularJS translate-once source code for one-time binding attributes" target="_blank">one-time binding an element's properties</a>. The following attribute directives can be used:</p>
+<ul>
+<li><code>translate-once-value</code></li>
+<li><code>translate-once-placeholder</code></li>
+<li><code>translate-once-title</code></li>
+<li><code>translate-once-alt</code></li>
+</ul>
+<p>The same process takes place as when using <code>translate-once</code>, the only difference is that once <code>$tranlsate()</code> resolves, it updates the element's corresponding attribute. So if we do <code>translate-once-placeholder="TRANSLATION_KEY"</code>, <code>&#x3C;input placeholder="translation value" /></code> will be rendered in the end.</p>
+<h2>Contributing</h2>
+<p>As always, I welcome anyone to contribute a pull request over on the <a href="https://github.com/ajwhite/angular-translate-once" title="translate-once github repository" target="_blank">Github repo</a>. Please make sure that tests are written for any changes or additions made.</p></div></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.page={"componentChunkName":"component---src-page-components-posts-post-js","jsonName":"blog-angularjs-translate-once-angular-translate-one-time-binding-610","path":"/blog/angularjs-translate-once-angular-translate-one-time-binding"};window.dataPath="190/path---blog-angularjs-translate-once-angular-translate-one-time-binding-610-b63-hyBUR8BjBhadIHLCC3kV6wn6g0";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app.319712d3e7fffa8163a7.css","/app-5f862d30c389b7e33f69.js"],"component---src-page-components-posts-post-js":["/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js"],"component---src-pages-404-js":["/component---src-pages-404-js.a82bc48cfa31deea5b5f.css","/component---src-pages-404-js-1d8ef4bfd6950bd882e3.js"],"component---src-pages-index-js":["/component---src-pages-index-js.a82bc48cfa31deea5b5f.css","/component---src-pages-index-js-6623fc1c7954d7e08157.js"],"component---src-pages-page-2-js":["/component---src-pages-page-2-js.a82bc48cfa31deea5b5f.css","/component---src-pages-page-2-js-8b55a05b5c2fbefdcf8b.js"]};/*]]>*/</script><script src="/webpack-runtime-aec8d6ecca58d5cf01b4.js" async=""></script><script src="/app-5f862d30c389b7e33f69.js" async=""></script><script src="/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js" async=""></script></body></html>

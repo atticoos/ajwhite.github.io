@@ -1,0 +1,131 @@
+<!DOCTYPE html><html><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/><style data-href="/app.319712d3e7fffa8163a7.css">code[class*=language-],pre[class*=language-]{color:#657b83;font-family:Consolas,Monaco,Andale Mono,Ubuntu Mono,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-hyphens:none;-ms-hyphens:none;hyphens:none}code[class*=language-]::-moz-selection,code[class*=language-] ::-moz-selection,pre[class*=language-]::-moz-selection,pre[class*=language-] ::-moz-selection{background:#073642}code[class*=language-]::selection,code[class*=language-] ::selection,pre[class*=language-]::selection,pre[class*=language-] ::selection{background:#073642}pre[class*=language-]{padding:1em;margin:.5em 0;overflow:auto;border-radius:.3em}:not(pre)>code[class*=language-],pre[class*=language-]{background-color:#fdf6e3}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em}.token.cdata,.token.comment,.token.doctype,.token.prolog{color:#93a1a1}.token.punctuation{color:#586e75}.namespace{opacity:.7}.token.boolean,.token.constant,.token.deleted,.token.number,.token.property,.token.symbol,.token.tag{color:#268bd2}.token.attr-name,.token.builtin,.token.char,.token.inserted,.token.selector,.token.string,.token.url{color:#2aa198}.token.entity{color:#657b83;background:#eee8d5}.token.atrule,.token.attr-value,.token.keyword{color:#859900}.token.class-name,.token.function{color:#b58900}.token.important,.token.regex,.token.variable{color:#cb4b16}.token.bold,.token.important{font-weight:700}.token.italic{font-style:italic}.token.entity{cursor:help}</style><meta name="generator" content="Gatsby 2.0.53"/><style data-emotion-css=""></style><title data-react-helmet="true"></title><link rel="shortcut icon" href="/icons/icon-48x48.png"/><link rel="manifest" href="/manifest.webmanifest"/><meta name="theme-color" content="#663399"/><link as="script" rel="preload" href="/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js"/><link as="script" rel="preload" href="/app-5f862d30c389b7e33f69.js"/><link as="script" rel="preload" href="/webpack-runtime-aec8d6ecca58d5cf01b4.js"/><link rel="preload" href="/static/d/639/path---blog-shipit-f-99-6cd-n7FS9oOUaMoRoMqyL0Z7RWeUXw.json" as="fetch" crossOrigin="use-credentials"/></head><body><div id="___gatsby"><div style="outline:none" tabindex="-1" role="group"><div>Hello World<div><p><a href="https://github.com/shipitjs/shipit" title="Shipit - An automation engine and deployment tool written for NodeJS" target="_blank">Shipit</a> is... awesome.</p>
+<p>Really, though. I've found this to be a fantastic tool for managing my release process. Albeit I'm only using this for my personal website at this time, I can see how I'd use this for continuously deploying at my day job. Over there we use Capistrano, and there's many parallels between the two. Let's start by looking at how it works, and then we'll compare.</p>
+<h2>How it works</h2>
+<p>Chances are you're familiar with <a href="https://github.com/gruntjs/grunt" title="Grunt: The JavaScript Task Runner" target="_blank">grunt</a> or <a href="https://github.com/gulpjs/gulp" title="Gulp.js - The streaming build system">gulp</a>. Aside from them both being build task managers, they both are common in that they have a file that you use to define the tasks, a <code>gruntfile</code> or a <code>gulpfile</code>, respectively. When a task is ran, the file is located and the referenced task becomes executed. Shipit works the same way with a <code>shipitfile</code> and a command line interface.</p>
+<p>First, make sure you have <code>shipit</code> installed</p>
+<p>{% highlight sh %}
+npm install -g shipit-cli
+{% endhighlight %}</p>
+<p>And once we get to the <code>shipitfile</code>, you'll be able to run deployments as you would run a build with <code>grunt</code> or <code>gulp</code>.</p>
+<p>{% highlight sh %}
+shipit production deploy
+{% endhighlight %}</p>
+<p>This command is made up of three things:</p>
+<ol>
+<li><code>shipit</code> -- the executable</li>
+<li><code>production</code> -- the environment</li>
+<li><code>deploy</code> -- the task</li>
+</ol>
+<h2>Shipitfile</h2>
+<p>The first thing you're going to do is create a file called <code>shipitfile.js</code>. Let's look to the simple example from the <a href="https://github.com/shipitjs/shipit" title="Automation engine and deployment tool">readme</a>.</p>
+<p>{% highlight javascript %}
+module.exports = function (shipit) {
+shipit.initConfig({
+staging: {
+servers: 'myproject.com'
+}
+});</p>
+<p>  shipit.task('pwd', function () {
+return shipit.remote('pwd');
+});
+};
+{% endhighlight %}</p>
+<p>This, again, is pretty similar to <em>both</em> <code>grunt</code> and <code>gulp</code>.</p>
+<h3>Grunt similarities</h3>
+<p>It's similar to grunt because we declaratively create a configuration for the environment. Just like <code>grunt</code>, we can define multiple configuration modes in addition to a set of defaults.</p>
+<p>{% highlight javascript %}
+shipit.initConfig({
+default: {
+foo: 'bar',
+hello: 'world'
+},
+staging: {
+foo: 'BAR'
+},
+production: {
+hello: 'WORLD'
+}
+});
+{% endhighlight %}</p>
+<p>You get the gist. If we were to run <code>shipit staging XYZ</code>, it's going to use the staging configuration rules first, and then the default to default to the rest of the configuration. If we were to run <code>shipit production XYZ</code>, same idea -- it'll use the production configuration followed by coalescing with the default configuration.</p>
+<h3>Gulp similarities</h3>
+<p>It's similar to gulp because we functionally compose our tasks.</p>
+<p>{% highlight javascript %}
+shipit.task('createFile', function () {
+return shipit.remote('touch helloworld.txt');
+});</p>
+<p>shipit.task('writeFile', function () {
+return shipit.remote('echo "hello, world!" > helloworld.txt');
+});
+{% endhighlight %}</p>
+<p>These will run just like how you might run a gulp task -- <code>shipit production createFile</code> and <code>shipit production writeFile</code>.</p>
+<p>And, you may have guessed it, yes, you can define dependency tasks for other tasks like so:</p>
+<p>{% highlight javascript %}
+// createFile will run as a dependency before <code>writeFile</code> executes
+shipit.task('writeFile', ['createFile'], function () {
+return shipit.remote('echo "hello, world!" > helloworld.txt');
+});
+{% endhighlight %}</p>
+<p>Why is this so familiar? They both use <a href="https://github.com/orchestrator/orchestrator" title="A module for sequencing and executing tasks and dependencies in maximum concurrency" target="_blank">Orchestrator</a> for sequencing and executing their tasks. So whatever you're familiar with in <code>gulp</code>, you'll feel at home here with <code>shipit</code>.</p>
+<p>You can think of this almost like a <code>gulp</code> file for your server deployments.</p>
+<h2>Deploying releases with <a href="https://github.com/shipitjs/shipit-deploy" title="Shipit - An automation engine and deployment tool written for NodeJS" target="_blank">shipit-deploy</a></h2>
+<p>Shipit, on its own, is not a fully integrated release manager. It is an underlying set of organized tools to facilitate with executing remote commands and performing <code>rsync</code> to deploy files, but out of the box it is not a release manager.</p>
+<p>To take advantage of continuous releases with Shipit comes <a href="https://github.com/shipitjs/shipit-deploy" title="Set of deplyment tasks for Shipit based on git and rsync commands" target="_blank">shipit-deploy</a>. This can be thought of as a predefined set of tasks that take care of building and churning a set of releases. This is where things start to get similar to Capistrano.</p>
+<p>First, let's take a look at the <code>shipitfile</code> that <code>shipit-deploy</code> provides as an example in their <a href="https://github.com/shipitjs/shipit-deploy/blob/master/README.md" title="Shipit README" target="_blank">readme</a>.</p>
+<p>{% highlight javascript %}
+module.exports = function (shipit) {
+require('shipit-deploy')(shipit);</p>
+<p>  shipit.initConfig({
+default: {
+workspace: '/tmp/github-monitor',
+deployTo: '/tmp/deploy<em>to',
+repositoryUrl: '<a href="https://github.com/user/repo.git&#x27;">https://github.com/user/repo.git'</a>,
+ignores: ['.git', 'node</em>modules'],
+keepReleases: 2,
+deleteOnRollback: false,
+key: '/path/to/key',
+shallowClone: true
+},
+staging: {
+servers: 'user@my-staging-server.com'
+},
+production: {
+servers: 'user@my-production-server.com'
+}
+});
+};
+{% endhighlight %}</p>
+<p>That's it. Really. There's nothing more that you have to do than specify your repository, the path on the server you want to deploy to, and the server itself. If you have a well prepared environment, such as having configurations in <code>~/.ssh/config</code>, then you don't even need to specify the <code>key</code> location or the ssh username. Let's look at what each property does starting with the most important pieces.</p>
+<h4><code>deployTo</code></h4>
+<p>This is the remote path on your server where you want your releases to live. It <strong>will not be your servable directory</strong>. We'll get to the directory structure that gets generated below.</p>
+<h4><code>repositoryUrl</code></h4>
+<p>You're likely deploying from version control. This would specify where that lives.</p>
+<h4><code>staging.servers</code>, <code>production.servers</code>, etc</h4>
+<p>First, this is plural because this can be a collection. This is useful if you have multiple instances of your application behind a load balancer. This is the hostname of that(those) box(es).</p>
+<h4><code>key</code></h4>
+<p>This is the path to your private key file. I'd suggest leaving this up to <code>~/.ssh/config</code> so that your deployment can be flexible and agnostic to the environment its run on. If you use CircleCI, it will automatically configure a hostname when you set up private SSH keys.</p>
+<hr>
+<p>Onto the less important configuration details</p>
+<h4><code>workspace</code></h4>
+<p>This is not very significant, and it should probably live in <code>/tmp</code> so it will certainly become removed when your reboot. This is simply the "workspace" where <code>shipit</code> will deal with fetching and preparing files to sync remotely.</p>
+<h4><code>ignores</code></h4>
+<p>This is a collection of paths, and I believe expressions, that you want your deployment to exclude</p>
+<h4><code>keepReleases</code></h4>
+<p>You can specify how many historical releases you want to to live on your server. We'll go into detail about how this is set up below, but the gist is that you'll want atleast a few that you can rollback to.</p>
+<h4><code>deleteOnRollback</code></h4>
+<p>This is pretty self explanatory -- if you rollback a release, do you want it to also become deleted?</p>
+<h4><code>shallowClone</code></h4>
+<p>Most of the time this will be <code>true</code>. This simply refers to the <a href="https://git-scm.com/docs/git-clone">depth of the <code>git clone</code></a>. Typically for builds you're going to be deploying the <code>HEAD</code> commit and you won't really need any history of revisions.</p>
+<p>You can find the whole set of options <a href="https://github.com/shipitjs/shipit-deploy/blob/master/README.md#options" title="Shipit README options" target="_blank">here</a>.</p>
+<h2>Release structure</h2>
+<p>As hinted above, your deployment is not simply a set of files that gets thrown up a directory served by your webserver. This is where things get very similar to <a href="http://capistranorb.com/documentation/getting-started/structure/" title="Capistrano release structure" target="_blank">Capistrano's structure</a>. Your deployment safely creates a release directory sibling to previous release directories, and simply rotates a symbolic link used by your webserver which points to the latest release. This makes for zero downtime, and it allows you to rotate -- forward or backward.</p>
+<img src="/dist/images/blog/shipit/release-structure.png" alt="Shipit release structure" />
+<h3>Serving the right directory</h3>
+<p>Shipit is going to create a symlink to the latest release, or the latest rollback, named <code>current/</code>.</p>
+<p>If your <code>deployTo</code> path is <code>/www/application</code>, then your latest release will always live in <code>/www/application/current</code>. If you serve your application from the root of the project, then <code>current/</code> is where you're going to want to point it. If, say, you serve it out of a subdirectory, <code>public/</code>, then <code>/www/application/current/public</code> is where you'll be serving from</p>
+<h3>Releases</h3>
+<p>As seen in the release structure there is a directory of <code>releases/</code> with many sibling releases of directories named with timestamps. The <code>current/</code> is always pointing to the latest release, or the latest rollback. Depending on what you set for <code>keepReleases</code>, that will be the number of releases that are kept. As you can assume, Shipit uses a FIFO approach to keep rotating the oldest releases off of your server.</p>
+<p>As to clear up any misunderstanding, if we were to look in one of these directories, you'll find your deployed application.</p>
+<img src="/dist/images/blog/shipit/release-content.png" alt="Shipit release content" />
+<h2>Real world examples</h2>
+<p>If you'd like to see how I used Shipit with CircleCI and Jekyll to deploy this website, you can read me other post about <a href="/blog/continuous-deployment-jekyll-circleci-shipit" title="Continuously deploying Jekyll with CircleCI and ShipIt">continuously deploying Jekyll with Shipit</a>, or simply take a look at <a href="https://github.com/ajwhite/jekyll-portfolio" title="Github repository of atticuswhite.com">the repository</a>.</p></div></div></div></div><script id="gatsby-script-loader">/*<![CDATA[*/window.page={"componentChunkName":"component---src-page-components-posts-post-js","jsonName":"blog-shipit-f99","path":"/blog/shipit"};window.dataPath="639/path---blog-shipit-f-99-6cd-n7FS9oOUaMoRoMqyL0Z7RWeUXw";/*]]>*/</script><script id="gatsby-chunk-mapping">/*<![CDATA[*/window.___chunkMapping={"app":["/app.319712d3e7fffa8163a7.css","/app-5f862d30c389b7e33f69.js"],"component---src-page-components-posts-post-js":["/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js"],"component---src-pages-404-js":["/component---src-pages-404-js.a82bc48cfa31deea5b5f.css","/component---src-pages-404-js-1d8ef4bfd6950bd882e3.js"],"component---src-pages-index-js":["/component---src-pages-index-js.a82bc48cfa31deea5b5f.css","/component---src-pages-index-js-6623fc1c7954d7e08157.js"],"component---src-pages-page-2-js":["/component---src-pages-page-2-js.a82bc48cfa31deea5b5f.css","/component---src-pages-page-2-js-8b55a05b5c2fbefdcf8b.js"]};/*]]>*/</script><script src="/webpack-runtime-aec8d6ecca58d5cf01b4.js" async=""></script><script src="/app-5f862d30c389b7e33f69.js" async=""></script><script src="/component---src-page-components-posts-post-js-0ce19c8df93989175e36.js" async=""></script></body></html>

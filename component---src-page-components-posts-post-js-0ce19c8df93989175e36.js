@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[2],{137:function(n,e,r){"use strict";r.r(e),r.d(e,"default",function(){return t}),r.d(e,"pageQuery",function(){return u});var o=r(9);r(0);function t(n){return console.log("das props",n),Object(o.jsx)("div",null,"Hello World",Object(o.jsx)("div",{dangerouslySetInnerHTML:{__html:n.data.markdownRemark.html}}))}var u="1368201206"}}]);
+//# sourceMappingURL=component---src-page-components-posts-post-js-0ce19c8df93989175e36.js.map
