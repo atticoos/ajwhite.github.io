@@ -3,15 +3,31 @@ import React from 'react'
 import styled from '@emotion/styled'
 import jobs from '../../../data/employment'
 import Colors from 'common/style/colors'
+import DotCanvas from 'Components/DotCanvas/DotCanvas'
 import Row from 'Components/Row';
+import Section from '../Section';
 import Job from './Job'
+
+const BackgroundDots = styled(DotCanvas)({
+  opacity: 0.05,
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0
+});
 
 export default function Work (props) {
   return (
-    <Container>
+    <Section color={Colors.DARK}>
+      <BackgroundDots
+        maskStyle={{
+          backgroundColor: 'transparent'
+        }}
+      />
       <Content>
-        <Title>I love building products.</Title>
-        <Row style={{justifyContent: 'space-between'}}>
+        <Section.Title>I love building products</Section.Title>
+        <Row style={{justifyContent: 'space-around'}}>
           <div>
             {jobs.map((job, i) => (
               <Job
@@ -30,31 +46,10 @@ export default function Work (props) {
           </div>
         </Row>
       </Content>
-    </Container>
+    </Section>
   )
 }
 
-const Title = styled.div({
-  marginBottom: 120,
-  marginTop: -120,
-  color: 'rgba(255, 255, 255, 1)',
-  fontSize: 42,
-  textAlign: 'center'
-})
-
-const Container = styled.div({
-  backgroundColor: Colors.DARK,
-  padding: '120px 0',
-  // height: '100vh',
-  display: 'flex',
-  alignItems: 'center',
-  flexDirection: 'row'
-  // width: '80%',
-  // margin: '300px auto'
-})
-
 const Content = styled.div({
-  width: '80%',
-  padding: '80px 0',
-  margin: 'auto'
+  position: 'relative'
 })

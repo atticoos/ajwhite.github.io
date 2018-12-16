@@ -4,26 +4,31 @@ import Card from 'Components/Card';
 import Row from 'Components/Row';
 import {Title, Subtitle, Colors} from 'Components/Type';
 
-const Job = ({job, ...props}) => (
-  <Container {...props}>
-    <Row>
-      <Logo src={job.image} />
-      <div>
-        <JobTitle>{job.title}</JobTitle>
-        <JobSubtitle>{job.subtitle}</JobSubtitle>
-      </div>
-    </Row>
-    {job.date && <RoleDate current={job.date === 'Current'}>
+const Job = ({job, active, ...props}) => (
+  <div {...props}>
+  <Row {...props}>
+    <RoleDate current={job.date === 'Current'}>
       <span>{job.date === 'Current' ? 'Now' : job.date}</span>
-    </RoleDate>}
-  </Container>
+    </RoleDate>
+
+    <Container active={active}>
+      <Row>
+        <Logo src={job.image} />
+        <div>
+          <JobTitle>{job.title}</JobTitle>
+          <JobSubtitle>{job.subtitle}</JobSubtitle>
+        </div>
+      </Row>
+    </Container>
+  </Row>
+  </div>
 )
 
 export default Job
 
 const Container = styled.div({
   position: 'relative',
-  marginBottom: 32,
+  // marginBottom: 32,
   padding: 16,
   borderRadius: 8
 }, ({active}) => active && ({
@@ -55,12 +60,13 @@ const JobSubtitle = styled(Subtitle)({
 })
 
 const RoleDate = styled.div({
-  position: 'absolute',
-  textAlign: 'right',
-  left: -120,
-  width: 100,
-  top: '50%',
-  transform: 'translateY(-50%)',
+  // position: 'absolute',
+  // textAlign: 'right',
+  // left: -120,
+  // width: 100,
+  // top: '50%',
+  // transform: 'translateY(-50%)',
+  marginRight: 16,
   fontSize: 18,
   color: 'rgba(255, 255, 255, 0.25)'
 }, props => props.current && ({

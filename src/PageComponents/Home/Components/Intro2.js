@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import TextLoop from 'react-text-loop';
+import Row from 'Components/Row';
 
 const Colors = {
   // YELLOW: '#F8E9A1',
@@ -23,11 +24,11 @@ export default function Intro2 () {
 
         <Loud>
           <TextLoop>
-            <span>Software Developer</span>
-            <span>Team Lead</span>
-            <span>Speaker</span>
-            <span>Tech Lead</span>
-            <span>Weekend Hacker</span>
+            <span>👨‍💻 software developer</span>
+            <span>🙋‍♂ team lead</span>
+            <span>🎙 speaker</span>
+            <span>📐 tech lead</span>
+            <span>⚙️ weekend hacker</span>
           </TextLoop>
         </Loud>
       </p>
@@ -36,8 +37,13 @@ export default function Intro2 () {
         I've been learning and exploring new boundaries ever since.
       </p>
       <p>
-        Today I'm building <Employer>Robin</Employer> in <Technology>React</Technology>.
+        Today I'm building a smarter workplace at <Employer>Robin</Employer> with <Technology>React</Technology>.
       </p>
+      <p>
+        I'm most active on <Technology>Twitter</Technology> and <Catchy>Github</Catchy>.
+      </p>
+
+      <Social />
     </Container>
   )
 }
@@ -70,4 +76,21 @@ const Technology = styled.span({
 const Employer = styled.span({
   color: Colors.RED,
   borderBottom: `2px solid ${Colors.RED}`
+})
+
+const Social = () => (
+  <Row>
+    <MockSocialIcon />
+    <MockSocialIcon />
+    <MockSocialIcon />
+  </Row>
+)
+
+const MockSocialIcon = styled.div({
+  height: 32,
+  width: 32,
+  borderRadius: '50%',
+  backgroundColor: 'lightgray',
+  marginRight: 8,
+  opacity: 0.5
 })

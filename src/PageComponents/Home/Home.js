@@ -7,6 +7,7 @@ import IntroCard from './Components/Intro';
 import Intro2 from './Components/Intro2';
 import Jobs from './Components/Jobs';
 import Work from './Work'
+import Learning from './Learning';
 
 const BackgroundDotCanvas = styled(DotCanvas)({
   // position: 'fixed',
@@ -26,6 +27,7 @@ const IndexPage = () => (
 
     <div style={{position: 'relative'}}>
     <Work />
+    <Learning />
 
     <Centered style={{marginTop: 200}}>
 

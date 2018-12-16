@@ -9,10 +9,11 @@ export default class DotCanvas extends React.Component {
   }
 
   render() {
+    const {maskStyle, ...props} = this.props;
     return (
-      <div {...this.props}>
+      <div {...props}>
         <div ref={this.initCanvas} />
-        <Mask />
+        <Mask style={maskStyle} />
       </div>
     );
   }
