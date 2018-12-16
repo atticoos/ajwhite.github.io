@@ -16,7 +16,7 @@ One of the first questions nearly everyone asks when they first start using Reac
 This is where <a href="https://github.com/ajwhite/render-if" target="_blank" title="RenderIf - Conditionally render React components">render-if</a> comes in.
 
 ## As an in-line condition
-```js
+```javascript
 render() {
   return (
     {renderIf(1 + 2 === 3)(
