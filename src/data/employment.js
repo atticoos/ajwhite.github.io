@@ -22,7 +22,7 @@ module.exports = [
     skills: ['NodeJS']
   },
   {
-    image: '/static/parklabs.png',
+    image: 'https://media.licdn.com/dms/image/C4D0BAQFgb3uUxlYgzw/company-logo_400_400/0?e=1553126400&v=beta&t=pJcgfxxcHhvOmy-6Ri2Ikls7__3gV_kKOoNE3x8gHBM',
     title: 'Park Labs',
     subtitle: 'Software Developer',
     date: 2012,
@@ -30,7 +30,7 @@ module.exports = [
   },
   {
     image: 'https://cdn4.iconfinder.com/data/icons/small-n-flat/24/terminal-512.png',
-    title: 'Consulting',
+    title: 'Contracting',
     subtitle: 'Web Developer',
     date: 2008
   }

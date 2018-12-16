@@ -18,6 +18,7 @@ exports.onCreateWebpackConfig = ({actions: {setWebpackConfig}}) => {
   setWebpackConfig({
     resolve: {
       alias: {
+        common: path.resolve(__dirname, 'src/common'),
         Components: path.resolve(__dirname, 'src/components')
       }
     }
