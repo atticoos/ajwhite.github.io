@@ -16,7 +16,7 @@ When I first heard of ES7 generators, it took me a couple cycles of reading to u
 A generator is basically a function with a different type of `return`. Instead of returning values, it _produces_, or _yeilds_ a value whenever `next()` is called. A generator's code block runs until the first `yield` line. That line only gets executed when `next()` is called. When `next()` is called, whatever value is yielded is given to next and the code continues to run until the next `yeild` is reached, or otherwise completes. When you call a generator, it returns you an _instance_ of the generator, similar to how you might call `new FunctionName()`.
 
 For example, this will `yield` two values, `a` and then `b`, and then it will be done:
-{% highlight javascript %}
+```js
 function* example() {
   yield 'a';
   yield 'b';
@@ -26,18 +26,18 @@ var instance = example();
 console.log(instance.next()) // {value: 'a', done: false}
 console.log(instance.next()) // {value: 'b', done: false}
 console.log(instance.next()) // {value: undefined, done: true}
-{% endhighlight %}
+```
 
 In other examples, you can `yield` inside a loop. In the example below, we have a generator that produces an identifier. Since the `yield` lives in an infinite loop, it will always produce a `next()` value.
 
-{% highlight javascript%}
+```js
 function* idGenerator() {
   var id = 0;
   while (true) {
     yield ++id;
   }
 }
-{% endhighlight %}
+```
 
 There's 2 important things to recognize about how this is written, and one important thing to understand.
 
@@ -47,13 +47,13 @@ There's 2 important things to recognize about how this is written, and one impor
 
 I want us to understand point 3. When you create a generator, it returns to you an _instance_ of that generator, which will retain the scope. Let's look at how this will behave:
 
-{% highlight javascript%}
+```js
 var generatorInstance = idGenerator();
 console.log(generatorInstance.next()) // {value: 1, done: false}
 console.log(generatorInstance.next()) // {value: 2, done: false}
 console.log(generatorInstance.next()) // {value: 3, done: false}
 // to infinity and beyond
-{% endhighlight %}
+```
 
 
 
@@ -61,18 +61,18 @@ console.log(generatorInstance.next()) // {value: 3, done: false}
 
 In other languages, such as Java, lists can generate iterable interfaces, such as, `(List) myList.iterator()`. With ES6, we can do the same thing.
 
-{% highlight javascript%}
+```js
 function* iterable(list) {
   var index = 0;
   while (index < list.length) {
     yield list[index++];
   }
 }
-{% endhighlight %}
+```
 
 This will provide a similar iterator interface that you'd expect from other languages.
 
-{% highlight javascript%}
+```js
 var list = ['a', 'b', 'c', 'd', 'e'];
 var iterator = iterable(list);
 
@@ -80,6 +80,6 @@ var item;
 while (!(item = iterator.next()).done) {
   console.log(item.value);
 }
-{% endhighlight %}
+```
 
 This example is used from <a href="https://github.com/ajwhite/iterator-generator" target="_blank" title="Iterator Generator">iterator-generator</a>.

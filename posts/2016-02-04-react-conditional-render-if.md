@@ -16,7 +16,7 @@ One of the first questions nearly everyone asks when they first start using Reac
 This is where <a href="https://github.com/ajwhite/render-if" target="_blank" title="RenderIf - Conditionally render React components">render-if</a> comes in.
 
 ## As an in-line condition
-{% highlight js %}
+```js
 render() {
   return (
     {renderIf(1 + 2 === 3)(
@@ -24,10 +24,10 @@ render() {
     )}
   );
 }
-{% endhighlight %}
+```
 
 ## As a named conditional function
-{% highlight js %}
+```js
 render() {
   const ifUniverseIsWorking = renderIf(1 + 2 === 3)
   return (
@@ -36,10 +36,10 @@ render() {
     )}
   );
 }
-{% endhighlight %}
+```
 
 ## As a composed conditional function
-{% highlight js %}
+```js
 const ifEven = count => renderIf(count % 2 === 0);
 const ifOdd = count => renderIf(count % 2 !== 0);
 render() {
@@ -52,7 +52,7 @@ render() {
     )}
   );
 }
-{% endhighlight %}
+```
 
 ## Conditionals don't work so well in React
 
@@ -72,7 +72,7 @@ In the case of `if (false && true)`, the same idea applies. Since this is an `AN
 
 Lastly, in the case of javascript, when you have an expression `var result = true && 'foobar'`, you actually don't get a boolean back, you get the final value in the expression, `foobar`. This allows us to use the second value in our expression as the "return" object, which we can take advantage of in JSX:
 
-{% highlight js %}
+```js
 class MyComponent extends Component {
   render() {
     return (
@@ -82,13 +82,13 @@ class MyComponent extends Component {
     );
   }
 }
-{% endhighlight %}
+```
 
 ### The variable
 
 This is a pretty common one. A variable is used to hold the element, and the variable assignment is based on a condition. You'll see this most frequently when you're dealing with an `if-else` scenario.
 
-{% highlight js %}
+```js
 class MyComponent extends Component {
   render() {
     var component;
@@ -102,13 +102,13 @@ class MyComponent extends Component {
     );
   }
 }
-{% endhighlight %}
+```
 
 ### The function
 
 This is also a common one. You'll see this when there's a lot of conditional UI components that would bloat the `render` function, or if the logic is complex and is better contained separately.
 
-{% highlight js %}
+```js
 class MyComponent extends Component {
   render() {
     return (
@@ -123,7 +123,7 @@ class MyComponent extends Component {
     }
   }
 }
-{% endhighlight %}
+```
 
 All of these are valid approaches to conditional UI components. Each one can be more beneficial than the other depending on the scenario.
 
@@ -131,7 +131,7 @@ All of these are valid approaches to conditional UI components. Each one can be 
 
 `render-if` takes a different approach. A lot of people when they first start off might be tempted to treat JSX like liquid templates control flow tags:
 
-{% highlight js %}
+```js
 render() {
   return (
     {if (1 + 2 === 3)}
@@ -139,11 +139,11 @@ render() {
     {endif}
   );
 }
-{% endhighlight %}
+```
 
 Unfortunately, or rather fortunately, you've found that it doesn't work this way. With `render-if`, we can achieve a syntatically similar and valid approach.
 
-{% highlight js %}
+```js
 render() {
   return (
     {renderIf(1 + 2 === 3)(
@@ -151,15 +151,15 @@ render() {
     )}
   );
 }
-{% endhighlight %}
+```
 
 `render-if` is a curry function. Meaning it's a function that returns a function based on the context provided by the original function call. `renderIf(predicate)(element)`. If the `predicate` is `true`, the `element` passed into the second call is returned. If the `predicate` is `false`, the `element` is not returned.
 
 It's as simple as that.
 
-{% highlight js %}
+```js
 const renderIf = predicate => element => predicate && element;
-{% endhighlight %}
+```
 
 This affords us the ability to do two things. As seen in the example above, we can structure our `renderIf` very similar to an `if` statement, just without curly brackets `{ }`. It also allows us to compose named conditional render functions.
 
@@ -167,7 +167,7 @@ This affords us the ability to do two things. As seen in the example above, we c
 
 Having a curry function allows us to compose functions representing our conditions. It's easiest to understand this by looking at an example:
 
-{% highlight js %}
+```js
 render() {
   const ifUniverseIsWorking = renderIf(1 + 2 === 3);
   const ifUniverseIsNotWorking = renderIf(1 + 2 !== 3);
@@ -183,7 +183,7 @@ render() {
     </div>
   );
 }
-{% endhighlight %}
+```
 
 This is where things get a bit nicer and fall a bit closer to the React tree. We're used to being able to easily render collections, like `{collection.map((value, index) => <span key={index}>{value}</span>)}`. However we don't have a nice way to do this with conditions. Until now.
 
@@ -191,7 +191,7 @@ This is where things get a bit nicer and fall a bit closer to the React tree. We
 
 Let's take a look at what a real React component might look like with `render-if`.
 
-{% highlight js %}
+```js
 class OddsEvens extends Component {
   constructor(props) {
     super(props);
@@ -222,12 +222,12 @@ class OddsEvens extends Component {
     );
   }
 }
-{% endhighlight %}
+```
 
 It's also very composable. Say we don't want to put `const` in the `render` method, but rather define it outside the class and call it as a function providing the value to evaluate in the condition.
 
 
-{% highlight js %}
+```js
 const isEven = count => renderIf(count % 2 === 0)
 const isOdd = count => renderIf(count % 2 !== 0)
 
@@ -259,7 +259,7 @@ class OddsEvens extends Component {
     );
   }
 }
-{% endhighlight %}
+```
 
 ## You don't _really_ need this
 
@@ -267,7 +267,7 @@ In the end, this is handy, but all we're really doing is creating a function tha
 
 Let's lastly look at how we might do this with the language itself by creating a curried function that behaves as an `if-else`
 
-{% highlight js %}
+```js
 const ifEven = number => element => elseElement => {
   if (number % 2 === 0) return element;
   return elseElement;
@@ -284,6 +284,6 @@ class MyComponent extends Component {
     );
   }
 }
-{% endhighlight %}
+```
 
 You can find this project <a href="https://github.com/ajwhite/render-if" target="_blank" title="RenderIf - Conditionally render React components">on Github</a>.
