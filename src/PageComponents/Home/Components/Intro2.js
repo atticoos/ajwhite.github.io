@@ -42,7 +42,7 @@ export default function Intro2 () {
         Today I'm building a smarter workplace at <Employer>Robin</Employer> with <Technology>React</Technology>.
       </p>
       <p>
-        I'm most active on <Technology>Twitter</Technology> and <Catchy>Github</Catchy>.
+        I'm most active on <Twitter>Twitter</Twitter> and <Github>Github</Github>.
       </p>
 
       <Social />
@@ -74,6 +74,14 @@ const Catchy = styled.span({
 
 const Technology = styled.span({
   color: Colors.BLUE
+})
+
+const Twitter = styled(Technology)({
+  borderBottom: `2px solid ${Colors.BLUE}`
+})
+
+const Github = styled(Catchy)({
+  borderBottom: `2px solid ${Colors.YELLOW}`
 })
 
 const Employer = styled.span({
