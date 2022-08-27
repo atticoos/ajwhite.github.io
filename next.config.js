@@ -6,6 +6,9 @@ const nextConfig = {
     images: {
       unoptimized: true
     }
+  },
+  env: {
+    GOOGLE_ANALYTICS_ID: process.env.GOOGLE_ANALYTICS_ID
   }
 }
 
