@@ -23,14 +23,14 @@ export function Home() {
         </P>
         <P size="lg">
           Founding principal engineer{' '}
-          <A href="https://robinpowered.com" color={Colors.Red}>@Robin</A>, where I <Span color={Colors.Orange}>shape & build</Span> WorkTech products for workplaces around the globe.
+          <A href="https://robinpowered.com" color={Colors.Red}>@Robin</A>, where I <Span color={Colors.Orange}>shape & build</Span> WorkTech products.
         </P>
         <P size="md">
           <A href="https://fs.blog/mental-models/">Mental Models</A>
           {' '}&middot;{' '}
           <A href="https://basecamp.com/shapeup/webbook">Shape Up</A>
           {' '}&middot;{' '}
-          <A href="https://en.wikipedia.org/wiki/Domain-driven_design">DDD</A>
+          <A href="https://en.wikipedia.org/wiki/Domain-driven_design">Domain Driven Design</A>
         </P>
         <Socials />
       </Content>
