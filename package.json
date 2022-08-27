@@ -18,11 +18,13 @@
     "@fortawesome/free-regular-svg-icons": "^6.1.2",
     "@fortawesome/free-solid-svg-icons": "^6.1.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "framer-motion": "^7.2.1",
     "jquery": "3.2",
     "lodash": "4.17",
     "next": "12.2.5",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "usehooks-ts": "^2.6.0"
   },
   "devDependencies": {
     "@types/node": "18.7.13",
