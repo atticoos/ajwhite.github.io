@@ -224,16 +224,9 @@ export default (function ($) {
 
   function buildCanvas (element) {
     element.height($(window).innerHeight());
-    console.log('wtf', element)
     var canvas = new Canvas(element);
     canvas.start();
   }
-
-  $(document).ready(function () {
-    // $('.dots-canvas').each(function () {
-    //   buildCanvas($(this));
-    // });
-  });
 
   return (el) => {
     $(el || '.dots-canvas').each(function () {
