@@ -30,7 +30,7 @@ export function Home() {
           {' '}&middot;{' '}
           <A href="https://basecamp.com/shapeup/webbook">Shape Up</A>
           {' '}&middot;{' '}
-          <A href="https://en.wikipedia.org/wiki/Domain-driven_design">Domain Driven Design</A>
+          <A href="https://en.wikipedia.org/wiki/Domain-driven_design">DDD</A>
         </P>
         <Socials />
       </Content>
