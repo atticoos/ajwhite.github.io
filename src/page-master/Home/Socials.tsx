@@ -29,6 +29,7 @@ export function Socials() {
 }
 
 const SocialRow = styled.div`
+  margin-top: 18px;
   & svg {
     margin-right: 24px;
   }
