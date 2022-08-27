@@ -1,10 +1,7 @@
 import styled from '@emotion/styled'
 import { A, P, Span, TextLoop } from '../../components';
-import { DotCanvas } from '../../components/DotCanvas/DotCanvas';
 import { Colors } from '../../design-system';
-import { Socials } from './Socials';
-
-// Text loop, https://codepen.io/Gumball22/pen/podZOo
+import { DotCanvas, Socials } from './components';
 
 export function Home() {
   return (
