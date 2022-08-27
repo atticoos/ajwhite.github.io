@@ -12,7 +12,7 @@ export function Home() {
       <BackgroundDotCanvas />
       <Content>
         <P size="lg">
-          I'm <Span color={Colors.Red}>Atticus White</Span>, a Boston & Toronto based <Span color={Colors.Orange}>👨‍💻developer</Span>
+          {`I'm`} <Span color={Colors.Red}>Atticus White</Span>, a Boston & Toronto based <Span color={Colors.Orange}>{'👨‍💻'}developer</Span>
         </P>
         <P size="lg">
           8 years ago we created {' '}
