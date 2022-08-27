@@ -2,12 +2,25 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { MDXProvider } from '@mdx-js/react';
 import Image from 'next/image';
+import { getPosts } from '../../utils/getPosts';
+import Link from 'next/link';
 
 const ResponsiveImage = (props) => <Image alt={props.alt} layout="responsive" {...props} />;
 
 const mdxComponents = {
   img: ResponsiveImage
 };
+
+export const getStaticProps = async () => {
+  const posts = getPosts();
+  const postObjects = await Promise.all(posts.map(post => require(`./${post}`)));
+  const postMeta = postObjects.map(post => post.meta);
+  return {
+    props: {
+      posts: postMeta
+    }
+  }
+}
 
 const BlogPage: NextPage = (props) => {
   return (
@@ -18,6 +31,15 @@ const BlogPage: NextPage = (props) => {
       </Head>
       <h2>Blog</h2>
       <MDXProvider components={mdxComponents}>
+        <ul>
+          {props.posts?.map(post => (
+            <li key={post.permalink}>
+              <Link href={post.permalink}>
+                {post.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
         <main {...props} />
       </MDXProvider>
     </div>
