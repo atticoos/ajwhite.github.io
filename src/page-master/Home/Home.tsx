@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { P, Span, TextLoop } from '../../components';
+import { A, P, Span, TextLoop } from '../../components';
 import { DotCanvas } from '../../components/DotCanvas/DotCanvas';
 import { Colors } from '../../design-system';
 import { Socials } from './Socials';
@@ -22,8 +22,15 @@ export function Home() {
           </TextLoop>
         </P>
         <P size="lg">
-          8 years ago we created {' '}
-          <a href="https://robinpowered.com"><Span color={Colors.Red}>Robin</Span></a>, where I continue to <Span color={Colors.Orange}>shape & build</Span> WorkTech products.
+          Founding principal engineer{' '}
+          <A href="https://robinpowered.com" color={Colors.Red}>@Robin</A>, where I <Span color={Colors.Orange}>shape & build</Span> WorkTech products for workplaces around the globe.
+        </P>
+        <P size="md">
+          <A href="https://fs.blog/mental-models/">Mental Models</A>
+          {' '}&middot;{' '}
+          <A href="https://basecamp.com/shapeup/webbook">Shape Up</A>
+          {' '}&middot;{' '}
+          <A href="https://en.wikipedia.org/wiki/Domain-driven_design">Domain Driven Design</A>
         </P>
         <Socials />
       </Content>
