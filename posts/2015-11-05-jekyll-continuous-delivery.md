@@ -41,7 +41,7 @@ This is what CircleCI will be doing:
 
 `shipit` will be taking care of the last step: deploying the static build to my server. Let's take a look at what <a href="https://github.com/ajwhite/jekyll-portfolio/blob/master/shipitfile.js" title="atticuswhite.com shipit file" target="_blank">shipitfile</a> looks like:
 
-{% highlight javascript %}
+```js
 var path = require('path');
 
 module.exports = function (shipit) {
@@ -71,7 +71,7 @@ module.exports = function (shipit) {
     shipit.remoteCopy(buildDirectory, shipit.releasePath);
   });
 };
-{% endhighlight %}
+```
 
 
 `shipit.initConfig` is pretty basic -- we define
@@ -85,12 +85,12 @@ module.exports = function (shipit) {
 
 The important part of the `shipitfile` is the `on updated` listener:
 
-{% highlight javascript %}
+```js
 shipit.on('updated', function () {
   var buildDirectory = path.resolve('./public/');
   shipit.remoteCopy(buildDirectory, shipit.releasePath);
 });
-{% endhighlight %}
+```
 
 As mentioned previously, I don't want to run the entire build on my server. We've already built it on the CI server, and we're deploying a static site, so there's no migrations or other moving parts I need to take care of. I can just move my built project over to the production server.
 
@@ -114,7 +114,7 @@ CircleCI, like Travis and other CI integrations, <a href="https://circleci.com/d
 
 This, as I found, had a couple of challenges in it. At first, I thought I could simply use <a href="http://jekyllrb.com/docs/configuration/#specifying-a-jekyll-environment-at-build-time" title="Jekyll environment configuration" target="_blank">Jekyll environment</a>, but that's only to define a name for the environment, not accessing an object of environment variables. To do this, I had to add a plugin, <a href="https://github.com/ajwhite/jekyll-environment-variables" title="Jekyll environment variables generator plugin">jekyll-environment-variables</a>, that would take environment variables and add them to the site:
 
-{% highlight rb %}
+```rb
 module Jekyll
   class EnvironmentVariablesGenerator < Generator
     def generate(site)
@@ -123,7 +123,7 @@ module Jekyll
     end
   end
 end
-{% endhighlight %}
+```
 
 ## Putting it all together
 

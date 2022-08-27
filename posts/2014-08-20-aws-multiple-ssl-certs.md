@@ -19,7 +19,7 @@ As some of you may know from experience, you can only host one domain's SSL cert
 
 Let's take a look at what a basic Apache SSL configured Virtual Host may look like:
 
-{% highlight html %}
+```
 NameVirtualHost *:443
 <IfModule mod_ssl.so>
   <VirtualHost *:443>
@@ -31,7 +31,7 @@ NameVirtualHost *:443
     SSLCertificateChainFile chain.crt
   </VirtualHost>
 </IfModule>
-{% endhighlight %}
+```
 
 Unfortunately, we can not add any more Virtual Hosts to :443. Before Apache loads up the virtual host and serves anything, the handshake must have been successful -- meaning the certificate would have already been delivered and the connection has been established for the domain attached to :443. That means we cannot add another VirtualHost and let apache decide which SSL certificate to choose, as there's no context yet of what is being requested until the connection is securely established -- and then this information may be passed through it.
 
@@ -75,7 +75,7 @@ The user makes a request to Domain C, which is pointing to Load Balancer C, and 
 
 Assume the following configuration for Apache:
 
-{% highlight html %}
+```
 NameVirtualHost *:443
 <IfModule mod_ssl.so>
   <VirtualHost *:443>
@@ -105,7 +105,7 @@ NameVirtualHost *:443
     SSLCertificateChainFile chain.crt
   </VirtualHost>
 </IfModule>
-{% endhighlight %}
+```
 
 Now apache has a different secure virtual host for each one of these new ports -- :443, :8443, and :8444 -- which can be any available port # of your choosing.
 

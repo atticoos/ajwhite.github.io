@@ -18,7 +18,7 @@ Let's take a look at an angular example using GulpJS for the following two build
 
 So we define the following two build tasks:
 
-{% highlight javascript %}
+```js
 var gulp = require('gulp'),
     concat = require('gulp-concat'),
     templateCache = require('gulp-angular-templatecache');
@@ -38,7 +38,7 @@ gulp.task('html2js', function () {
 });
 
 gulp.task('build', ['compile', 'html2js']);
-{% endhighlight %}
+```
 
 We can run each one, but they will produce two separate files -- `dist/main.js` and `dist/main.tpls.js`, where instead we'd prefer one. We could concatenate these files together, or have our concat task require the templateCache task and include that as the stream source, but neither of those are as clean as they could be. So what about creating two streams instead of two separate tasks? We could instead create these two streams and merge them together via <a title="event-stream" href="https://www.npmjs.org/package/event-stream" target="_blank">event-stream</a>: 
 
@@ -49,7 +49,7 @@ We can run each one, but they will produce two separate files -- `dist/main.js` 
 5. Pipe into `gulp-concat`
 6. And then finally pipe to our destination
 
-{% highlight javascript %}
+```js
 var gulp = require('gulp'),
     concat = require('gulp-concat'),
     templateCache = require('gulp-angular-templatecache'),
@@ -63,6 +63,6 @@ gulp.task('build', function () {
   .pipe(concat('main.js'))
   .pipe(gulp.dest('dist'));
 });
-{% endhighlight %}
+```
 
 Now we can take two different stream sources, process them through specific tasks, and have them result in the same output.

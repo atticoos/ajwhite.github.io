@@ -25,7 +25,7 @@ We have a handful of fields that will represent different parts of the page.
 
 Our markup could easily end up looking like so:
 
-{% highlight html %}
+```php
 <div class="something">
   <?php
     $bannerImage = get_field('top_banner_image');
@@ -55,11 +55,11 @@ Our markup could easily end up looking like so:
     <p><?php the_field('bottom_excerpt'); ?></p>
   </footer>
 </div>
-{% endhighlight %}
+```
 
 This is where I like to introduce a data model to the page that does all the data gathering and preparation before using it in my view. Coming from a software background, this feels a lot cleaner than mixing it all together. The model looks like so:
 
-{% highlight php %}
+```php
 <?php
 
 class WP_PageModel {
@@ -113,11 +113,11 @@ class HomePageModel extends WP_PageModel {
     $this->fillModelAttributes($this->bottom, $bottomModel);
   }
 }
-{% endhighlight %}
+```
 
 We end up building an object that has the properties for each section: top, featuredContent, bottom. We now have easy access to these properties to spit out and repeat over in our markups.
 
-{% highlight html %}
+```php
 <?php $page = new HomePageModel(); ?>
 <div class="something">
   <header style="background-image: url(<?php echo $page->top->image; ?>)">
@@ -138,4 +138,4 @@ We end up building an object that has the properties for each section: top, feat
     <p><?php echo $page->bottom->excerpt; ?>
   </footer>
 </div>
-{% endhighlight %}
+```

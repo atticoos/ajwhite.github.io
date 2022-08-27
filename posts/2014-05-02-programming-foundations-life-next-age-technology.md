@@ -66,7 +66,7 @@ Let's apply this to DNA.
 
 If we wanted to model a person in code, we would have something that may look like this:
 
-{% highlight java %}
+```java
 public class Perosn {
   private Head head;
   private Torsoe torsoe;
@@ -99,7 +99,7 @@ class Hand
 {
   private Finger[] fingers;
 }
-{% endhighlight %}
+```
 
 This would translate into computer code, and if we added more, we could model some behavior of a human. But what if this was meant for some biological entity? What if we were able to program in a human-readable way what proteins get created and how they develop, grow, evolve, function, and interact with each other, so that in the end we could have a "running application" when we compile it all?
 

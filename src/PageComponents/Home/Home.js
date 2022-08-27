@@ -19,11 +19,11 @@ const BackgroundDotCanvas = styled(DotCanvas)({
   left: 0
 })
 
-const IndexPage = () => (
+const IndexPage = (props) => (
   <Layout above={null}>
-    <div style={{height: '100vh'}}>
+    <div style={{height: '100vh', position: 'relative'}}>
       <BackgroundDotCanvas />
-      <Intro2 />
+      <Intro2 smartMirrorPost={props.data.smartMirrorPost} />
     </div>
 
     <div style={{position: 'relative'}}>

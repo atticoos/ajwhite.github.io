@@ -17,7 +17,7 @@ I wanted the end goal to be a very simple and friendly implementation where we'r
 So out comes <a href="https://github.com/ajwhite/titanium-chromecast" title="A Titanium Appcelerator GoogleCast module">titanium-chromecast</a>. It was built in the mindset of working with objects and that contain their own state and functionality, and avoid a system of just passing around identifiers. We should be able to get a Chromecast `device` and connect directly to it, for example <code class="highlight">device.connect()</code> and pretty much be done with it.
 
 The end result looks like:
-{% highlight javascript %}
+```js
 // reference the module
 var Chromecast = require('com.atticoos.titanium.chromecast');
 
@@ -41,13 +41,13 @@ deviceManager.addEventListener('deviceOnline', function (event) {
     });
   });
 });
-{% endhighlight %}
+```
 
 And there you have it. We scanned for devices, connected to one, started the application, and started interacting with the application. The only problem I have with the code above is the "callback hell"; more about the challenges of promises below.
 
 Casting video is also very simple (this feature is pending a release in the second week of June 2015).
 
-{% highlight javascript %}
+```js
 device.launchApplication(function () {
   device.castVideo({
     video: {
@@ -64,14 +64,14 @@ device.launchApplication(function () {
       }
   });
 });
-{% endhighlight %}
+```
 
 ## Installation
 
 This project exists on the <a href="http://gitt.io/" title="Titanium Appcelerator module package manager">gitTio</a> package manager.
-{% highlight sh %}
+```bash
 gittio install com.atticoos.titanium.chromecast
-{% endhighlight %}
+```
 
 ## How it works and things to improve.
 
@@ -81,34 +81,34 @@ You'll notice that we're able to interact with the Chromecast device directly th
 
 All of these devices and services map back into a native counterpart. So when we have a device with a method <code class="highlight">launchApplication()</code>, that will cross a bridge and invoke a method on the native instance of the device. This is our device proxy. We can provide it a callback function, which Titanium wraps with another proxy class, <code class="highlight">KrollCallback</code>, which let's us execute the callback to Javascript from our Objective-C code. It looks a little something like this:
 
-{% highlight objective-c %}
+```objectivec
 -(void)launchAppliation:(id)args
 {
   ENSURE_TYPE([args objectAtIndex: 0], KrollCallback);
   self.onApplicationSuccessfullyLaunchedCallback = [args objectAtIndex: 0];
   [self.deviceManager launchApplication];
 }
-{% endhighlight %}
+```
 
 And then when the application launches, our delegate (defined by chremecast's sdk) gets invoked, and then we bubble that event back out to Javascript:
-{% highlight objective-c %}
+```objectivec
 -(void)deviceManager:(GCKDeviceManager *)deviceManager didConnectToCastApplication:(GCKApplicationMetadata *)applicationMetaData sessionID:(NSString *)sessionID launchedApplication:(BOOL)launchedApplication
 {
   [self.device.onApplicationSuccessfullyLaunchedCallback call:@[sessionID] thisObject:self.device];
 }
-{% endhighlight %}
+```
 
 And if we look back at our javascript, we can see that the function we pass in will eventually get called with the `this` context being the device object once the application has launched
-{% highlight javascript %}
+```js
 device.launchApplication(function onApplicationSuccessfullyLaunchedCallback (sessionID) {
   console.log('our application launched with a sessionID of', sessionID);
 });
-{% endhighlight %}
+```
 
 ## Why are promises hard in Titanium modules?
 
 In an ideal scenario, we'd have something less like the code examples above, and something more like:
-{% highlight javascript %}
+```js
 device.connect().then(function () {
   return device.startApplication();
 }).then(function (session) {
@@ -116,7 +116,7 @@ device.connect().then(function () {
 }).catch(function (error) {
   // an error along the way.
 });
-{% endhighlight %}
+```
 
 So why is that so hard? Why aren't we using a standard <a href="https://github.com/promises-aplus/promises-spec">A+ promise model</a>?
 

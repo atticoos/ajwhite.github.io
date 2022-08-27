@@ -26,10 +26,10 @@ The workflow is broken into 3 segments:
 
 `ssh` into your server and clone the `letsencrypt` repository in your home directory and navigate into it.
 
-{%highlight shell-session %}
+```bash
 git clone git@github.com:letsencrypt/letsencrypt.git
 cd letsencrypt
-{% endhighlight %}
+```
 
 ## Requesting a certificate
 
@@ -37,9 +37,9 @@ In the cloned repository exists a script `letsencrypt-auto`. This typically will
 
 We'll go ahead and start the manual flow
 
-{% highlight 	shell-session %}
+```bash
 ./letsencrypt certonly --manual
-{% endhighlight %}
+```
 
 If this is the first time running the command, it will go ahead and download all the necessary packages. Let it run for a minute while it does that. You'll next be prompted to type in your `sudo` password.
 
@@ -56,7 +56,7 @@ Upon providing your domain name and agreeing that your IP will be logged, you'll
 
 You should see output similar to
 
-{% highlight 	shell-session %}
+```
 Make sure your web server displays the following content at
 http://atticuswhite.com/.well-known/acme-challenge/THE_VERIFICATION_FILE before continuing:
 
@@ -74,7 +74,7 @@ $(command -v python2 || command -v python2.7 || command -v python2.6) -c \
 s = BaseHTTPServer.HTTPServer(('', 80), SimpleHTTPServer.SimpleHTTPRequestHandler); \
 s.serve_forever()"
 Press ENTER to continue
-{% endhighlight %}
+```
 
 To summarize, you're going to create a file in your served directory that will be used to verify that you indeed own the location that the domain serves. This article assumes you're setting up an Apache server. If you have yet to set up a served directory, do that now. If you already have a directory that is serving your domain, navigate to that directory and create the following file path:
 
@@ -82,11 +82,11 @@ To summarize, you're going to create a file in your served directory that will b
 
 Next you'll want put the verification string into the file.
 
-{% highlight shell-session %}
+```bash
 cd /path/to/webserver/directory
 mkdir -p .well-known/acme-challenge/THE_VERIFICATION_FILE
 printf "%s" THE_VERIFICATION_STRING > .well-known/acme-challenge/THE_VERIFICATION_FILE
-{% endhighlight %}
+```
 
 Verify that this file is properly being served before continuing. Navigate to http://your-domain.com/.well-known/acme-challenge/THE_VERIFICATION_FILE and make sure it's outputting the verification string.
 
@@ -94,7 +94,7 @@ Once you have this confirmed, go back to your other `ssh` window and confirm the
 
 If verification was successful, you should receive a confirmation message containing the location of your certificate, chain, and private key file:
 
-{% highlight text %}
+```
 IMPORTANT NOTES:
  - Congratulations! Your certificate and chain have been saved at
    /etc/letsencrypt/live/your-domain.com/fullchain.pem. Your cert
@@ -104,7 +104,7 @@ IMPORTANT NOTES:
 
    Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
    Donating to EFF:                    https://eff.org/donate-le
-{% endhighlight %}
+```
 
 Awesome! Now let's setup that cert.
 
@@ -112,9 +112,9 @@ Awesome! Now let's setup that cert.
 
 Head over to your Apache configuration directory. Depending on what version of Apache you're running (Apache or Apache2) these next steps may vary. The overall configuration is the same in the end, however the directory structures are a bit different between the two.
 
-{% highlight shell-session %}
+```bash
 cd /etc/apache2
-{% endhighlight %}
+```
 
 We're going to set up 3 things:
 
@@ -124,11 +124,11 @@ We're going to set up 3 things:
 
 Inside `mods-available` will be `ssl.conf`, `ssl.load`, and `socache_shmcb.load`. If they do not exist in `mods-enabled`, you're going to link them.
 
-{% highlight shell-session %}
+```bash
 sudo ln -s mods-available/ssl.conf mods-enabled/ssl.conf
 sudo ln -s mods-available/ssl.load mods-enabled/ssl.load
 sudo ln -s mods-available/socache_shmcb.load mods-enabled/socache_shmcb.load
-{% endhighlight %}
+```
 
 That takes care of 1 and 2. Now we'll set up the SSL configuration.
 
@@ -136,7 +136,7 @@ Let's assume you already have the non SSL configuration set up. If you don't go 
 
 Open the configuration file for the non SSL virtual host and enter the following:
 
-{% highlight apacheconf %}
+```xml
 <VirtualHost *:443>
   ServerName your-server.com
   DocumentRoot /path/to/your-server
@@ -145,7 +145,7 @@ Open the configuration file for the non SSL virtual host and enter the following
   SSLCertificateKeyFile /etc/letsencrypt/live/your-domain.com/privkey.pem
   SSLCertificateChainFile /etc/letsencrypt/live/your-domain.com/chain.pem
 </VirtualHost>
-{% endhighlight %}
+```
 
 Go ahead and verify your configuration (`service apache2 configtest`) or restart your web server, typically `service apache2 restart`. You should now be able to access your site over SSL!
 
@@ -153,15 +153,15 @@ Go ahead and verify your configuration (`service apache2 configtest`) or restart
 
 In order to do this, you'll need to make sure you have the `rewerite` mod enabled. If you don't see it in `mods-enabled`, go ahead and link it:
 
-{% highlight shell-session %}
+```bash
 ln -s mods-available/rewrite.load mods-enabled/rewerite.load
-{% endhighlight %}
+```
 
 In your site configuration, add the following lines:
 
-{% highlight apacheconf %}
+```
 RewriteEngine On
 RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301, L]
-{% endhighlight %}
+```
 
 Voilla! You're now secured. Give a big thanks to the team and community over at <a href="https://twitter.com/letsencrypt" title="Let's Encrypt" target="_blank">@LetsEncrypt</a> and on <a href="https://github.com/letsencrypt/letsencrypt" title="Let's Encrypt on Github" target="_blank">GitHub</a>!

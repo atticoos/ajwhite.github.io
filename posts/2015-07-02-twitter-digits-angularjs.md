@@ -19,7 +19,7 @@ Twitter recently came out with their web version of <a href="https://get.fabric.
 
 ## Example Usage
 
-{% highlight javascript %}
+```js
 // inject the digits module
 angular.module('app', ['atticoos.digits'])
 
@@ -43,20 +43,20 @@ angular.module('app', ['atticoos.digits'])
     }
   });
 });
-{% endhighlight %}
+```
 
 That's pretty much the gist. We have a nice promise based implementation, along with some response models that make it easy to ask the model questions about what type of error occurred that prevented a successful authentication, or to retrieve the authorization headers after a successful authentication.
 
 ## Installation
 
 The package is available on bower
-{% highlight sh %}
+```bash
 bower install angular-digits
-{% endhighlight %}
+```
 
-{% highlight javascript %}
+```js
 angular.module('app', ['atticoos.digits']);
-{% endhighlight %}
+```
 
 ## Twitter Flight
 

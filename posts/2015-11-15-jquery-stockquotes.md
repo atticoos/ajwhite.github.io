@@ -15,26 +15,28 @@ disqus_id: '2015-11-15-jquery-stock-quotes'
 
 You can install this with Bower, `bower install jquery-stockquotes --save`
 
-{% highlight html %}
+```html
 <!-- import jQuery and the plugin -->
 <script src="bower_components/jquery/jquery.js"></script>
 <script src="bower_components/jquery-stockquotes/dist/jquery.stockquotes.js"></script>
 <link rel="stylesheet" type="text/css" href="bower_components/jquery-stockquotes/dist/jquery.stockquotes.css" />
-
+```
+```html
 <!-- the HTML integration -->
 Twitter:  <span class="stock-quote" data-symbol="TWTR"></span>
 Facebook: <span class="stock-quote" data-symbol="FB"></span>
 Google:   <span class="stock-quote" data-symbol="GOOGL"></span>
 Netflix:  <span class="stock-quote" data-symbol="NTFLX"></span>
 Yahoo:    <span class="stock-quote" data-symbol="YHOO"></span>
-
+```
+```html
 <!-- the JS integration -->
 <script>
 $(document).on('ready', function () {
   $('.stock-quote').stockQuotes();
 });
 </script>
-{% endhighlight %}
+```
 
 This will produce the following
 

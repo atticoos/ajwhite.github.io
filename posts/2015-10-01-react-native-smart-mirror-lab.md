@@ -75,47 +75,34 @@ And there you have it! This is where I left off after hooking up my APIs.
 
 My implementation was really basic. Just a series of components. I still need to clean this up so I can control the visibility of the component from a higher level and not show rows that don't have any notifications.
 
-{% highlight javascript %}
-var DateView = require('./components/date'),
-    TimeView = require('./components/time'),
-    WeatherView = require('./components/weather'),
-    StockView = require('./components/stock'),
-    TwitterView = require('./components/twitter'),
-    GithubView = require('./components/github'),
-    CalendarView = require('./components/calendar');
+```jsx
+import {
+  DateView,
+  TimeView,
+  WeatherView,
+  StockView,
+  GithubView,
+  CalendarView
+} from './Views'
 
-var MagicMirror = React.createClass({
-  render: function() {
-    var stocks = ['FB', 'TWTR', 'AAPL', 'GOOGL', 'MSFT', 'TSLA'],
-        twitterUsers = ['berniesanders', 'robinpowered', 'elonmusk'];
-    return (
-      <View style={styles.container}>
-        <View style={styles.row}>
-          <DateView></DateView>
-        </View>
-        <View style={styles.row}>
-          <TimeView></TimeView>
-        </View>
-        <View style={[styles.row, styles.margin]}>
-          <WeatherView></WeatherView>
-        </View>
-        <View style={[styles.row, styles.margin]}>
-          <TwitterView users={twitterUsers}></TwitterView>
-        </View>
-        <View style={[styles.row, styles.margin]}>
-          <GithubView></GithubView>
-        </View>
-        <View style={[styles.row, styles.margin]}>
-          <CalendarView></CalendarView>
-        </View>
-        <View style={styles.stocks}>
-          <StockView symbols={stocks}></StockView>
-        </View>
-      </View>
-    );
-  }
-});
-{% endhighlight %}
+function MagicMirror () {
+  const stocks = ['FB', 'TWTR', 'AAPL', 'GOOGL', 'MSFT', 'TSLA']
+  const twitterUsers = ['atticoos', 'robinpowered', 'elonmusk']
+  return (
+    <View>
+      <MirrorLayout top right>
+        <DateView />
+        <TimeView />
+        <WeatherView />
+        <TwitterView users={twitterUsers} />
+        <GithubView />
+        <CalendarView />
+      </MirrorLayout>
+      <Stocks stocks={stocks} />
+    </View>
+  )
+}
+```
 
 You can find my project over at <a href="https://github.com/ajwhite/MagicMirror" target="_blank">github.com/ajwhite/MagicMirror</a>.
 

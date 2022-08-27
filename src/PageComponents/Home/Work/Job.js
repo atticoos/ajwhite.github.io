@@ -5,7 +5,7 @@ import Row from 'Components/Row';
 import {Title, Subtitle, Colors} from 'Components/Type';
 
 const Job = ({job, active, ...props}) => (
-  <div {...props}>
+  <Wrapper {...props}>
   <Row {...props}>
     <RoleDate current={job.date === 'Current'}>
       <span>{job.date === 'Current' ? 'Now' : job.date}</span>
@@ -21,18 +21,26 @@ const Job = ({job, active, ...props}) => (
       </Row>
     </Container>
   </Row>
-  </div>
+  </Wrapper>
 )
 
 export default Job
 
+const Wrapper = styled.div({
+  width: 375
+})
+
 const Container = styled.div({
   position: 'relative',
+  width: '100%',
   // marginBottom: 32,
   padding: 16,
-  borderRadius: 8
+  borderRadius: 8,
+  '&:hover': {
+    // backgroundColor: 'rgba(0, 0, 0, 0.15)'
+  }
 }, ({active}) => active && ({
-  backgroundColor: 'rgba(0, 0, 0, 0.15)'
+  // backgroundColor: 'rgba(0, 0, 0, 0.15)'
 }))
 
 const Logo = styled.div({

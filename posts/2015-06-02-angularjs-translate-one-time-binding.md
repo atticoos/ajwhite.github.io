@@ -15,15 +15,15 @@ Many of you are likely familiar with Pascal Precht's i18n localization library, 
 
 <a href="https://github.com/ajwhite/angular-translate-once">`translate-once`</a> adds support for one-time bindings for translations with a new `translate-once`</a> directive. It extends the existing functionality of `angular-translate` and doesn't introduce any new dependencies. It is written to be considered an extension within the same namespace as `pascalprecht.translate`.
 
-{% highlight html %}
+```html
 <span translate-once="TRANSLATION_KEY"></span>
-{% endhighlight %}
+```
 
 Installation is done via bower, and if you already include the `pascalprecht.translate` module into your angular project, you'll be good to go.
 
-{% highlight sh %}
+```bash
 bower install angular-translate-once
-{% endhighlight %}
+```
 
 ## Why do we need this?
 
@@ -37,45 +37,45 @@ Let's look at what is currently available in the `angular-translate` package.
 
 
 Use it as a **filter**
-{% highlight html %}
+```html
 {{ 'TRANSLATION_KEY' | translate }}
-{% endhighlight %}
+```
 
 Use it as a **directive**
-{% highlight html %}
+```html
 <span translate="TRANSLATION_KEY"></span>
-{% endhighlight %}
+```
 
 Use it as a **directive with values **
-{% highlight html %}
+```html
 <span translate="TRANSLATION_KEY" translate-values="{foo: 'bar'}"></span>
-{% endhighlight %}
+```
 
 Use it as a **directive and compile** elements formed from the translation
-{% highlight html %}
+```html
 <span translate="TRANSLATION_KEY" translate-compile></span>
-{% endhighlight %}
+```
 
 Or even use it in within javascript in one of two ways:
 
 **Asynchronously**
-{% highlight javascript %}
+```js
 $translate('TRANSLATION_KEY').then(function (translation) {
   alert(translation);
 });
-{% endhighlight %}
+```
 
 **Synchronously**
-{% highlight javascript %}
+```js
 alert($translate.instant('TRANSLATION_KEY'));
-{% endhighlight %}
+```
 
 ## But what about one-time binding?
 Let's first look at some approaches one might make with the current toolkit. Intuitively, one might try to do this in how a standard one-time binding would work after <a href="http://blog.thoughtram.io/angularjs/2014/10/14/exploring-angular-1.3-one-time-bindings.html" title="AngularJS 1.3 one-time bindings" target="_blank">Angular 1.3 introduced one-time bindings</a>.
 
-{% highlight html %}
+```html
 <span ng-bind="{{:: 'TRANSLATION_KEY' | translate }}"></span>
-{% endhighlight %}
+```
 
 Your intuition would lead you to think that the output from this would be a span tag with the translation inside and question why I'm even here writing this post. Unfortunately, that is not the case if you asynchronously load your localization files, as many large applications do. You may be safe after your application has completed any deferred asset loading, but before then, your first page rendered will likely be missing all its one-time bound translations.
 
@@ -89,7 +89,7 @@ When you introduce a one-time binding to the expression, your binding will only 
 
 Let's look at how this works:
 
-{% highlight javascript %}
+```js
 function linker (scope, element, attrs) {
   var translateValues = {};
   if (attrs.translateValues) {
@@ -103,34 +103,34 @@ function linker (scope, element, attrs) {
     }
   });
 }
-{% endhighlight %}
+```
 
 The first thing that happens is a backward compatible step to ensure we expose existing functionality that `angular-translate` offers -- passing `translate-values` to be used in dynamic localization entries.
 
-{% highlight javascript %}
+```js
 if (attrs.translateValues) {
   translateValues = $parse(attrs.translateValues)(scope);
 }
-{% endhighlight %}
+```
 
 We take the `translate-values` attributes, and `$parse` it on the shared scope. Note: the scope is not isolated, it is shared with the context the directive exists in, such that when we parse the values, they are parsed in the scope that the expression exists in.
 
 The second thing that happens is calling `$translate()`. This asynchronously looks up the localization entry, and once it is available, it resolves with the answer if the entry exists.
 
-{% highlight javascript %}
+```js
 $translate(attrs.translateOnce, translateValues).then(function .. );
-{% endhighlight %}
+```
 
 
 We then take the translation value, and set it to the element's content.
 
-{% highlight javascript %}
+```js
 var output = translation;
 if (attrs.hasOwnProperty('translateCompile')) {
   output = $compile(translation)(scope);
 }
 element.html(output);
-{% endhighlight %}
+```
 
 If the consumer requests that we compile the translation value, as it may contain elements with other bindings, the attribute flag `translate-compile` can be provided and is used in a backward compatible manner. Then we process the translation through `$compile` with the shared scope.
 

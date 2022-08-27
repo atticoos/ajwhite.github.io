@@ -16,7 +16,7 @@ One of the first questions nearly everyone asks when they first start using Reac
 This is where <a href="https://github.com/ajwhite/render-if" target="_blank" title="RenderIf - Conditionally render React components">render-if</a> comes in.
 
 ## As an in-line condition
-```javascript
+```jsx
 render() {
   return (
     {renderIf(1 + 2 === 3)(
@@ -27,7 +27,7 @@ render() {
 ```
 
 ## As a named conditional function
-```js
+```jsx
 render() {
   const ifUniverseIsWorking = renderIf(1 + 2 === 3)
   return (
@@ -39,7 +39,7 @@ render() {
 ```
 
 ## As a composed conditional function
-```js
+```jsx
 const ifEven = count => renderIf(count % 2 === 0);
 const ifOdd = count => renderIf(count % 2 !== 0);
 render() {
@@ -72,7 +72,7 @@ In the case of `if (false && true)`, the same idea applies. Since this is an `AN
 
 Lastly, in the case of javascript, when you have an expression `var result = true && 'foobar'`, you actually don't get a boolean back, you get the final value in the expression, `foobar`. This allows us to use the second value in our expression as the "return" object, which we can take advantage of in JSX:
 
-```js
+```jsx
 class MyComponent extends Component {
   render() {
     return (
@@ -88,7 +88,7 @@ class MyComponent extends Component {
 
 This is a pretty common one. A variable is used to hold the element, and the variable assignment is based on a condition. You'll see this most frequently when you're dealing with an `if-else` scenario.
 
-```js
+```jsx
 class MyComponent extends Component {
   render() {
     var component;
@@ -108,7 +108,7 @@ class MyComponent extends Component {
 
 This is also a common one. You'll see this when there's a lot of conditional UI components that would bloat the `render` function, or if the logic is complex and is better contained separately.
 
-```js
+```jsx
 class MyComponent extends Component {
   render() {
     return (
@@ -131,7 +131,7 @@ All of these are valid approaches to conditional UI components. Each one can be 
 
 `render-if` takes a different approach. A lot of people when they first start off might be tempted to treat JSX like liquid templates control flow tags:
 
-```js
+```jsx
 render() {
   return (
     {if (1 + 2 === 3)}
@@ -143,7 +143,7 @@ render() {
 
 Unfortunately, or rather fortunately, you've found that it doesn't work this way. With `render-if`, we can achieve a syntatically similar and valid approach.
 
-```js
+```jsx
 render() {
   return (
     {renderIf(1 + 2 === 3)(
@@ -167,7 +167,7 @@ This affords us the ability to do two things. As seen in the example above, we c
 
 Having a curry function allows us to compose functions representing our conditions. It's easiest to understand this by looking at an example:
 
-```js
+```jsx
 render() {
   const ifUniverseIsWorking = renderIf(1 + 2 === 3);
   const ifUniverseIsNotWorking = renderIf(1 + 2 !== 3);
@@ -191,7 +191,7 @@ This is where things get a bit nicer and fall a bit closer to the React tree. We
 
 Let's take a look at what a real React component might look like with `render-if`.
 
-```js
+```jsx
 class OddsEvens extends Component {
   constructor(props) {
     super(props);
@@ -227,7 +227,7 @@ class OddsEvens extends Component {
 It's also very composable. Say we don't want to put `const` in the `render` method, but rather define it outside the class and call it as a function providing the value to evaluate in the condition.
 
 
-```js
+```jsx
 const isEven = count => renderIf(count % 2 === 0)
 const isOdd = count => renderIf(count % 2 !== 0)
 
@@ -267,7 +267,7 @@ In the end, this is handy, but all we're really doing is creating a function tha
 
 Let's lastly look at how we might do this with the language itself by creating a curried function that behaves as an `if-else`
 
-```js
+```jsx
 const ifEven = number => element => elseElement => {
   if (number % 2 === 0) return element;
   return elseElement;
