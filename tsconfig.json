@@ -16,6 +16,7 @@
     "incremental": true
   },
   "include": [
+    "src/utils/reportWebVitals.js",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",

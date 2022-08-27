@@ -1,8 +1,9 @@
 import '../styles/globals.css'
 import '@fortawesome/fontawesome-svg-core/styles.css'
-import type { AppProps } from 'next/app'
+import type { AppProps, NextWebVitalsMetric } from 'next/app'
 import Head from 'next/head';
 import { GoogleAnalytics } from '../components';
+import { reportWebVitals } from '../utils';
 
 function MyApp({ Component, pageProps}: AppProps) {
   return (
@@ -17,5 +18,7 @@ function MyApp({ Component, pageProps}: AppProps) {
     </>
   );
 }
+
+export { reportWebVitals };
 
 export default MyApp
