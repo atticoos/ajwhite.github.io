@@ -13,13 +13,13 @@ export function Socials() {
   return (
     <SocialRow>
       <a href="https://www.linkedin.com/in/atticuswhite/">
-        <FontAwesomeIcon icon={faLinkedin} size={iconSize} color={Colors.Blue} />
+        <FontAwesomeIcon icon={faLinkedin} size={iconSize} />
       </a>
       <a href="https://twitter.com/atticoos">
-        <FontAwesomeIcon icon={faTwitter} size={iconSize} color={Colors.Blue} />
+        <FontAwesomeIcon icon={faTwitter} size={iconSize} />
       </a>
       <a href="https://www.instagram.com/atticuswashere/">
-        <FontAwesomeIcon icon={faInstagram} size={iconSize} color={Colors.Purple} />
+        <FontAwesomeIcon icon={faInstagram} size={iconSize} />
       </a>
       <a href='https://github.com/ajwhite'>
         <FontAwesomeIcon icon={faGithub} size={iconSize} />

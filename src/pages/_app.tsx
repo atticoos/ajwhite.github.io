@@ -8,6 +8,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <Head>
         <link href="https://fonts.googleapis.com/css?family=Raleway:400,600|Open+Sans:400,300,700,600" rel="stylesheet" type="text/css" />
+        <link rel="shortcut icon" href="/static/favicon.png" />
       </Head>
       <Component {...pageProps} />
     </>
