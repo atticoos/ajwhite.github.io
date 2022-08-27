@@ -8,7 +8,8 @@
     "export": "next export",
     "start": "npm run dev",
     "production": "npm start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postbuild": "next-sitemap"
   },
   "dependencies": {
     "@emotion/react": "^11.10.0",
@@ -22,6 +23,7 @@
     "jquery": "3.2",
     "lodash": "4.17",
     "next": "12.2.5",
+    "next-sitemap": "^3.1.21",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "usehooks-ts": "^2.6.0"
