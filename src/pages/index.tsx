@@ -1,12 +1,14 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Home } from '../page-master';
+import { withGlobalStaticProps } from '../enhancers';
 
-export const getStaticProps = async () => ({
+export const getStaticProps = withGlobalStaticProps(async (_, globalProps) => ({
   props: {
+    ...globalProps.props,
     example: 'this is where we can load data'
   }
-})
+}))
 
 const HomePage: NextPage = () => {
   return (

@@ -23,11 +23,16 @@ concurrency:
   group: "pages"
   cancel-in-progress: true
 
+env:
+  GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
+
 jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: EnvTest
+        run: echo ${{ secrets }}
       - name: Checkout
         uses: actions/checkout@v3
       - name: Detect package manager
@@ -73,7 +78,10 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
-        run: ${{ steps.detect-package-manager.outputs.runner }} next build
+        run: |
+          touch .env.local
+          echo GOOGLE_ANALYTICS_ID=${{ secrets.GOOGLE_ANALYTICS_ID }} >> env.local
+          ${{ steps.detect-package-manager.outputs.runner }} next build
       - name: Static HTML export with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next export
       - name: Upload artifact
