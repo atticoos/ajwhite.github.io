@@ -6,11 +6,19 @@
     "dev": "next dev",
     "build": "next build",
     "export": "next export",
-    "start": "next run dev",
+    "start": "npm run dev",
     "production": "npm start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/styled": "^11.10.0",
+    "@fortawesome/fontawesome-svg-core": "^6.1.2",
+    "@fortawesome/free-brands-svg-icons": "^6.1.2",
+    "@fortawesome/free-regular-svg-icons": "^6.1.2",
+    "@fortawesome/free-solid-svg-icons": "^6.1.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "jquery": "3.2",
+    "lodash": "4.17",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0"
