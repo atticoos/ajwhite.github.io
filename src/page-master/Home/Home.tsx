@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { P, Span } from '../../components';
+import { P, Span, TextLoop } from '../../components';
 import { DotCanvas } from '../../components/DotCanvas/DotCanvas';
 import { Colors } from '../../design-system';
 import { Socials } from './Socials';
@@ -12,7 +12,14 @@ export function Home() {
       <BackgroundDotCanvas />
       <Content>
         <P size="lg">
-          {`I'm`} <Span color={Colors.Red}>Atticus White</Span>, a Boston & Toronto based <Span color={Colors.Orange}>{'👨‍💻'}developer</Span>
+          {`I'm `}
+          <Span color={Colors.Red}>Atticus White</Span>, a Boston & Toronto based{' '}
+          <TextLoop>
+            <Span color={Colors.Orange}>{'👨‍💻'} Developer</Span>
+            <Span color={Colors.Orange}>{'🚚'} Jeeper</Span>
+            <Span color={Colors.Orange}>{'👨‍👦'} Mentor</Span>
+            <Span color={Colors.Orange}>{'📐'} Tech lead</Span>
+          </TextLoop>
         </P>
         <P size="lg">
           8 years ago we created {' '}
