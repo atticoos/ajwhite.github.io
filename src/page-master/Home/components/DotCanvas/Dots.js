@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import jQuery from 'jquery';
 export default (function ($) {
   var MAX_DIAMETER = 30;
   var VELOCITY = 0.8;
@@ -233,4 +234,4 @@ export default (function ($) {
       buildCanvas($(this));
     });
   }
-})(require('jquery'));
+})(jQuery);

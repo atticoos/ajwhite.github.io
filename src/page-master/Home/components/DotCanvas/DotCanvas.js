@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from '@emotion/styled';
+import attachDotCanvas from './Dots';
 
 export class DotCanvas extends React.Component {
   initCanvas(ref) {
     if (ref) {
-      require('./Dots').default(ref);
+      attachDotCanvas(ref);
     }
   }
 
