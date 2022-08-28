@@ -1,7 +1,5 @@
-import styled from '@emotion/styled';
-import { keyframes } from '@emotion/react';
 import Image from 'next/image';
-import { m, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 export function Jeep() {
   return (
@@ -40,24 +38,3 @@ export function Jeep() {
 
 const y = (val: number): string => `translateY(${val}%)`;
 const rot = (deg: number): string => `rotate(${deg}deg)`;
-
-const bouncy = keyframes`
-from, 20%, 53%, 80%, to {
-  transform: translate3d(0,0,0);
-}
-
-40%, 43% {
-  transform: translate3d(0, -30px, 0);
-}
-
-70% {
-  transform: translate3d(0, -15px, 0);
-}
-
-90% {
-  transform: translate3d(0,-4px,0);
-}
-`;
-const BouncyImage = styled(Image)`
-  animate: ${bouncy} 1s ease infinite;
-`;
