@@ -10,7 +10,8 @@
     "start": "npm run dev",
     "production": "npm start",
     "lint": "next lint",
-    "postbuild": "next-sitemap"
+    "postbuild": "next-sitemap",
+    "prettier": "prettier --write \"**/*.{js,jsx,json,ts,tsx}\""
   },
   "dependencies": {
     "@emotion/react": "^11.10.0",
@@ -40,6 +41,7 @@
     "@types/react-dom": "18.0.6",
     "eslint": "8.23.0",
     "eslint-config-next": "12.2.5",
+    "prettier": "^2.7.1",
     "typescript": "4.8.2"
   }
 }
