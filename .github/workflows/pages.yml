@@ -82,6 +82,8 @@ jobs:
           touch .env.local
           echo GOOGLE_ANALYTICS_ID=${{ secrets.GOOGLE_ANALYTICS_ID }} >> env.local
           ${{ steps.detect-package-manager.outputs.runner }} next build
+      - name: Generate sitemap & robots files
+        run: ${{ steps.detect-package-manager.outputs.runner }} next-sitemap
       - name: Static HTML export with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next export
       - name: Upload artifact
