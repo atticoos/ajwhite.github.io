@@ -11,7 +11,8 @@
     "production": "npm start",
     "lint": "next lint",
     "postbuild": "next-sitemap",
-    "prettier": "prettier --write \"**/*.{js,jsx,json,ts,tsx}\""
+    "prettier": "prettier --write \"**/*.{js,jsx,json,ts,tsx}\"",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@emotion/react": "^11.10.0",
@@ -41,7 +42,13 @@
     "@types/react-dom": "18.0.6",
     "eslint": "8.23.0",
     "eslint-config-next": "12.2.5",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "typescript": "4.8.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
+    "*.{js,jsx,ts,tsx,json,css,md}": "prettier --write"
   }
 }
