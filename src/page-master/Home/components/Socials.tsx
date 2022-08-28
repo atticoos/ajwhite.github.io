@@ -17,19 +17,20 @@ export function Socials() {
       <a href="https://twitter.com/atticoos">
         <FontAwesomeIcon icon={faTwitter} size={iconSize} />
       </a>
-      <a href="https://www.instagram.com/atticuswashere/">
-        <FontAwesomeIcon icon={faInstagram} size={iconSize} />
-      </a>
       <a href='https://github.com/ajwhite'>
         <FontAwesomeIcon icon={faGithub} size={iconSize} />
+      </a>
+      <a href="https://www.instagram.com/atticuswashere/">
+        <FontAwesomeIcon icon={faInstagram} size={iconSize} />
       </a>
     </SocialRow>
   )
 }
 
 const SocialRow = styled.div`
-  margin-top: 24px;
+  margin-top: 8px;
   & svg {
-    margin-right: 24px;
+    scale: 0.8;
+    margin-right: 8px;
   }
 `;

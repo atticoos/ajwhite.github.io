@@ -15,7 +15,6 @@ export function TextLoop({
   index: controlledIndex
 }: Props): JSX.Element {
   const isControlled = controlledIndex !== undefined;
-  const uniqId = useMemo(() => Math.random(), []);
   const [managedIndex, setIndex] = useState(0);
   const index = isControlled ? controlledIndex : managedIndex;
   const items = useMemo(() => React.Children.toArray(children), [children]);
@@ -28,13 +27,14 @@ export function TextLoop({
   return (
     <Container>
       {animate ? (
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout">
           <motion.span
             key={index}
             style={{display: 'inline-block'}}
-            initial={{ transform: 'translateY(-40px)' }}
+            initial={{ transform: 'translateY(-20px)' }}
             animate={{ transform: 'translateY(0px)' }}
-            exit={{ display: 'none', opacity: 0 }}
+            transition={{ type: 'spring', duration: 0.3 }}
+            exit={{ opacity: 0 }}
           >
             <span style={{display: 'inline-block'}}>{items[index]}</span>
           </motion.span>
