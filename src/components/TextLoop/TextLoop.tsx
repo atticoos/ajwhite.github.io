@@ -4,28 +4,48 @@ import styled from '@emotion/styled';
 import { useInterval } from 'usehooks-ts';
 
 type Props = {
+  animate?: boolean
   children: ReactNode
+  index?: number
 }
 
-export function TextLoop({children}: Props): JSX.Element {
-  const [index, setIndex] = useState(0);
+export function TextLoop({
+  animate = true,
+  children,
+  index: controlledIndex
+}: Props): JSX.Element {
+  const isControlled = controlledIndex !== undefined;
+  const uniqId = useMemo(() => Math.random(), []);
+  const [managedIndex, setIndex] = useState(0);
+  const index = isControlled ? controlledIndex : managedIndex;
   const items = useMemo(() => React.Children.toArray(children), [children]);
+  console.log('id', {
+    index,
+    uniqId,
+    len: items.length
+  })
+
   useInterval(() => {
     setIndex(prevIndex => (prevIndex + 1) % items.length);
-  }, 3000);
+  }, isControlled ? null : 3000);
+
+
   return (
     <Container>
-      <AnimatePresence>
-        <motion.span
-          key={index}
-          style={{display: 'inline-block'}}
-          initial={{ transform: 'translateY(-40px)' }}
-          animate={{ transform: 'translateY(0px)' }}
-          exit={{ display: 'none' }}
-        >
-          {items[index]}
-        </motion.span>
-      </AnimatePresence>
+      {animate ? (
+        <AnimatePresence>
+          <motion.span
+            // key={`${uniqId}_${index + 1}`}
+            key={index}
+            style={{display: 'inline-block'}}
+            initial={{ transform: 'translateY(-40px)' }}
+            animate={{ transform: 'translateY(0px)' }}
+            exit={{ display: 'none', opacity: 0 }}
+          >
+            <span style={{display: 'inline-block'}}>{items[index]}</span>
+          </motion.span>
+        </AnimatePresence>
+      ) : items[index]}
     </Container>
   )
 }

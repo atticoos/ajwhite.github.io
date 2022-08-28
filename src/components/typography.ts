@@ -12,6 +12,7 @@ const colors = ({ color }: StyledColorProps) => color
   : undefined;
 
 const sizeDefs: Record<string, string> = {
+  xl: '42px',
   lg: '32px',
   md: '24px',
   sm: '16px'
