@@ -21,6 +21,25 @@ const sizes = ({ size }: StyledSizeProps) => size && sizeDefs[size]
   ? `font-size: ${sizeDefs[size]};`
   : undefined;
 
+const headingStyles = `
+  margin: 0 0 14px 0;
+  padding: 0;
+  line-height: 1.4;
+  ${colors}
+`;
+export const H2 = styled.h2`
+  ${headingStyles}
+  ${sizes({size: 'xl'})}
+`
+export const H3 = styled.h3`
+  ${headingStyles}
+  ${sizes({size: 'lg'})}
+`
+export const H4 = styled.h4`
+  ${headingStyles}
+  ${sizes({size: 'md'})}
+`
+
 export const P = styled.p<StyledSizeProps & StyledColorProps>`
   margin: 14px 0;
   line-height: 1.4;

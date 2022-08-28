@@ -12,13 +12,13 @@ export const getStaticProps = withGlobalStaticProps(async (_, globalProps) => ({
 
 const HomePage: NextPage = () => {
   return (
-    <div>
+    <>
       <Head>
         <title>Atticus White</title>
         <meta name="description" content="Atticus White - Software Engineer at Robin Powered, Inc." />
       </Head>
       <Home />
-    </div>
+    </>
   )
 }
 

@@ -19,11 +19,6 @@ export function TextLoop({
   const [managedIndex, setIndex] = useState(0);
   const index = isControlled ? controlledIndex : managedIndex;
   const items = useMemo(() => React.Children.toArray(children), [children]);
-  console.log('id', {
-    index,
-    uniqId,
-    len: items.length
-  })
 
   useInterval(() => {
     setIndex(prevIndex => (prevIndex + 1) % items.length);
@@ -33,9 +28,8 @@ export function TextLoop({
   return (
     <Container>
       {animate ? (
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           <motion.span
-            // key={`${uniqId}_${index + 1}`}
             key={index}
             style={{display: 'inline-block'}}
             initial={{ transform: 'translateY(-40px)' }}
