@@ -3,24 +3,31 @@ import { A, P, Span, TextLoop } from '../../components';
 import { Colors } from '../../design-system';
 import { DotCanvas, Socials } from './components';
 
+const textShadow = {
+  textShadow: '1px 2px 4px rgba(150, 150, 150, 0.4)'
+}
+
 export function Home() {
   return (
     <>
       <BackgroundDotCanvas />
       <Content>
-        <P size="lg">
+        <P size="lg" style={textShadow}>
           {`I'm `}
-          <Span color={Colors.Red}>Atticus White</Span>, a Boston & Toronto based{' '}
+          <strong><Span color={Colors.Red}>Atticus White</Span></strong>,<br />
+          a Boston & Toronto based{' '}
+          <strong>
           <TextLoop>
             <Span color={Colors.Orange}>{'👨‍💻'} Developer</Span>
             <Span color={Colors.Orange}>{'🚚'} Jeeper</Span>
             <Span color={Colors.Orange}>{'👨‍👦'} Mentor</Span>
-            <Span color={Colors.Orange}>{'📐'} Tech lead</Span>
           </TextLoop>
+          </strong>
         </P>
-        <P size="lg">
-          Founding principal engineer{' '}
-          <A href="https://robinpowered.com" color={Colors.Red}>@Robin</A>, where I <Span color={Colors.Orange}>shape & build</Span> WorkTech products.
+        <P size="lg" style={textShadow}>
+          Founding engineer{' '}
+          <strong><A href="https://robinpowered.com" color={Colors.Red}>@Robin</A></strong>,<br />
+          where I <strong><Span color={Colors.Orange}>shape & build</Span></strong> WorkTech products.
         </P>
         <P size="md">
           <A href="https://fs.blog/mental-models/">Mental Models</A>
