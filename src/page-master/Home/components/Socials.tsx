@@ -6,7 +6,6 @@ import {
   faTwitter
 } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Colors } from '../../../design-system';
 
 const iconSize = "3x";
 export function Socials() {
