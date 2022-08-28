@@ -37,7 +37,7 @@ export function Home() {
       <BackgroundDotCanvas />
       <Center>
         <Content>
-          <div style={{ width: 640 }}>
+          <Story>
             <StoryNav
               count={numStories}
               selectedIndex={storyIndex}
@@ -120,7 +120,7 @@ export function Home() {
               </A>
             </P>
             <Socials />
-          </div>
+          </Story>
 
           <Preview>
             {storyIndex === 0 ? (
@@ -149,12 +149,25 @@ export function Home() {
   );
 }
 
+const Story = styled.div`
+  @media only screen and (min-width: 640px) {
+    width: 640px;
+  }
+  @media only screen and (max-width: 640px) {
+    padding: 20px;
+  }
+`;
+
 const Preview = styled.div`
   position: relative;
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: center;
+
+  @media only screen and (max-width: 1200px) {
+    display: none;
+  }
 `;
 
 const Center = styled.div`
@@ -176,10 +189,10 @@ const Content = styled.section`
   flex: 1;
   justify-content: space-between;
   align-items: center;
-  width: 1200px;
   height: 420px;
 
-  @media only screen and (min-width: 640px) {
+  @media only screen and (min-width: 1200px) {
+    width: 1200px;
     // width: 640px;
     // margin-left: 80px;
   }
