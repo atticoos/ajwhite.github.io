@@ -1,10 +1,12 @@
-import Script from "next/script";
+import Script from 'next/script';
 
 type Props = {
-  googleAnalyticsId?: string | null
-}
+  googleAnalyticsId?: string | null;
+};
 
-export function GoogleAnalytics ({ googleAnalyticsId }: Props): JSX.Element | null {
+export function GoogleAnalytics({
+  googleAnalyticsId,
+}: Props): JSX.Element | null {
   if (!googleAnalyticsId) {
     return null;
   }
@@ -24,5 +26,5 @@ export function GoogleAnalytics ({ googleAnalyticsId }: Props): JSX.Element | nu
         `}
       </Script>
     </>
-  )
+  );
 }

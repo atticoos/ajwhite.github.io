@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _ from 'lodash';
 import jQuery from 'jquery';
 export default (function ($) {
   var MAX_DIAMETER = 30;
@@ -7,32 +7,38 @@ export default (function ($) {
   var COLOR = '#e0e6ed';
   var COLORS = ['#FF9900', '#424242', '#BCBCBC', '#3299BB'];
 
-  function Canvas ($container) {
+  function Canvas($container) {
     this.$container = $container;
     this.canvas = document.createElement('canvas');
     // this.canvas.style="filter:blur(3px)"
     this.canvas.width = $container.outerWidth();
     this.canvas.height = $container.outerHeight();
     this.context = this.canvas.getContext('2d');
-    this.dots = _.times(DOT_COUNT, function () {
-      return new Dot(
-        Math.round(Math.random() * this.canvas.width),
-        Math.round(Math.random() * this.canvas.height),
-        COLORS[_.random(0, COLORS.length - 1)]
-      );
-    }.bind(this));
+    this.dots = _.times(
+      DOT_COUNT,
+      function () {
+        return new Dot(
+          Math.round(Math.random() * this.canvas.width),
+          Math.round(Math.random() * this.canvas.height),
+          COLORS[_.random(0, COLORS.length - 1)]
+        );
+      }.bind(this)
+    );
     this.arc = new Arc(this.dots[0], this.dots[1]);
     this.$container.prepend(this.canvas);
     this.animating = false;
     this.lastArc = Date.now();
     this.render = this.render.bind(this);
-    $(window).on('resize', function () {
-      var width = $(window).width();
-      var height = $(window).height();
-      this.canvas.width = width;
-      this.canvas.height = height;
-      $container.height(height);
-    }.bind(this));
+    $(window).on(
+      'resize',
+      function () {
+        var width = $(window).width();
+        var height = $(window).height();
+        this.canvas.width = width;
+        this.canvas.height = height;
+        $container.height(height);
+      }.bind(this)
+    );
   }
 
   Canvas.prototype.drawArc = function () {
@@ -81,11 +87,13 @@ export default (function ($) {
   };
 
   Canvas.prototype.isDotOutOfBounds = function (dot) {
-    return dot.x > (this.canvas.width + dot.d / 2) ||
-      dot.x < (-dot.d / 2) ||
-      dot.y > (this.canvas.height + (dot.d / 2)) ||
-      dot.y < -(dot.d / 2);
-  }
+    return (
+      dot.x > this.canvas.width + dot.d / 2 ||
+      dot.x < -dot.d / 2 ||
+      dot.y > this.canvas.height + dot.d / 2 ||
+      dot.y < -(dot.d / 2)
+    );
+  };
 
   Canvas.prototype.start = function () {
     this.animating = true;
@@ -95,7 +103,7 @@ export default (function ($) {
 
   Canvas.prototype.stop = function () {
     this.animating = false;
-  }
+  };
 
   Canvas.prototype.render = function (time) {
     if (!this.animating) {
@@ -108,19 +116,22 @@ export default (function ($) {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     // Update the position of each dot and render them
-    _.forEach(this.dots, function (dot, i) {
-      dot.updatePosition(time);
-      this.drawDot(dot, time);
+    _.forEach(
+      this.dots,
+      function (dot, i) {
+        dot.updatePosition(time);
+        this.drawDot(dot, time);
 
-      // If a dot falls off the screen, trash it and create a new dot
-      if (this.isDotOutOfBounds(dot)) {
-        this.dots[i] = new Dot(
-          Math.round(Math.random() * this.canvas.width),
-          Math.round(Math.random() * this.canvas.height),
-          COLORS[_.random(0, COLORS.length - 1)]
-        );
-      }
-    }.bind(this));
+        // If a dot falls off the screen, trash it and create a new dot
+        if (this.isDotOutOfBounds(dot)) {
+          this.dots[i] = new Dot(
+            Math.round(Math.random() * this.canvas.width),
+            Math.round(Math.random() * this.canvas.height),
+            COLORS[_.random(0, COLORS.length - 1)]
+          );
+        }
+      }.bind(this)
+    );
 
     if (!this.arc.isComplete()) {
       // Draw an arc between two dots
@@ -145,9 +156,9 @@ export default (function ($) {
     }
 
     requestAnimationFrame(this.render);
-  }
+  };
 
-  function generateRandomVelocity (maxVelocity) {
+  function generateRandomVelocity(maxVelocity) {
     var direction = Math.random() < 0.5 ? 1 : -1;
     var lowerBound = 0.2;
     var velocity = direction * Math.random() * maxVelocity;
@@ -160,7 +171,7 @@ export default (function ($) {
     // return Math.max(0.2, (Math.random() < 0.5 ? 1 : -1) * Math.random() * velocity);
   }
 
-  function Arc (a, b) {
+  function Arc(a, b) {
     this.a = a;
     this.b = b;
     this.toProgress = 0;
@@ -191,17 +202,17 @@ export default (function ($) {
     return {
       cartesianCenter: {
         x: cX,
-        y: cY
+        y: cY,
       },
       polar: {
         radius: r,
         aTheta: aTheta,
-        bTheta: bTheta
-      }
+        bTheta: bTheta,
+      },
     };
   };
 
-  function Dot (x, y, color = COLOR) {
+  function Dot(x, y, color = COLOR) {
     this.x = x;
     this.y = y;
     this.originalX = x;
@@ -219,11 +230,11 @@ export default (function ($) {
 
     // Grow from a collapsed dot
     if (this.d < this.dMax) {
-      this.d = Math.min(this.dMax, this.d += 0.25);
+      this.d = Math.min(this.dMax, (this.d += 0.25));
     }
   };
 
-  function buildCanvas (element) {
+  function buildCanvas(element) {
     element.height($(window).innerHeight());
     var canvas = new Canvas(element);
     canvas.start();
@@ -233,5 +244,5 @@ export default (function ($) {
     $(el || '.dots-canvas').each(function () {
       buildCanvas($(this));
     });
-  }
+  };
 })(jQuery);

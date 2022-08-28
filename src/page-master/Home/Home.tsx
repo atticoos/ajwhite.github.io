@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { useInterval } from 'usehooks-ts';
@@ -7,45 +7,56 @@ import { A, P, Span, TextLoop } from '../../components';
 import { DotCanvas, Jeep, StoryNav, Socials } from './components';
 
 const textShadow = {
-  textShadow: '1px 2px 4px rgba(150, 150, 150, 0.4)'
-}
+  textShadow: '1px 2px 4px rgba(150, 150, 150, 0.4)',
+};
 
 const links = {
   ig: 'https://www.instagram.com/atticuswashere/',
   gh: 'https://github.com/ajwhite',
-  tw: 'https://twitter.com/atticoos'
-}
+  tw: 'https://twitter.com/atticoos',
+};
 export function Home() {
   const numStories = 3;
   const [indexSelected, setIndexSelected] = useState(false);
-  const [storyIndex, setStoryIndex] = useState(0)
-  useInterval(() => {
-    setStoryIndex(prev => (prev + 1) % numStories);
-  }, indexSelected ? null : 6000);
+  const [storyIndex, setStoryIndex] = useState(0);
+  useInterval(
+    () => {
+      setStoryIndex((prev) => (prev + 1) % numStories);
+    },
+    indexSelected ? null : 6000
+  );
   // const storyIndex = 2
 
   const onIndexSelected = (index: number) => {
-    setIndexSelected(true)
-    setStoryIndex(index)
-  }
+    setIndexSelected(true);
+    setStoryIndex(index);
+  };
 
   return (
     <>
       <BackgroundDotCanvas />
       <Center>
         <Content>
-          <div style={{width: 640}}>
+          <div style={{ width: 640 }}>
             <StoryNav
               count={numStories}
               selectedIndex={storyIndex}
               onIndexSelected={onIndexSelected}
             />
-            <P size="xl" style={{...textShadow, marginBottom: -12}}>
-              {`I'm`} <strong><Span color={Colors.Red}>Atticus White</Span></strong>,
+            <P size="xl" style={{ ...textShadow, marginBottom: -12 }}>
+              {`I'm`}{' '}
+              <strong>
+                <Span color={Colors.Red}>Atticus White</Span>
+              </strong>
+              ,
               <br />
               <TextLoop index={storyIndex} animate={false}>
-                <>a <strong>Boston</strong></>
-                <>a <strong>Toronto</strong></>
+                <>
+                  a <strong>Boston</strong>
+                </>
+                <>
+                  a <strong>Toronto</strong>
+                </>
                 <strong>Internet</strong>
               </TextLoop>
               {' based '}
@@ -61,29 +72,52 @@ export function Home() {
             <P size="lg" style={textShadow}>
               <TextLoop index={storyIndex} animate={false}>
                 <>
-                  Founding engineer <A href="https://robinpowered.com" color={Colors.Red}>@Robin</A> since 2014,
+                  Founding engineer{' '}
+                  <A href="https://robinpowered.com" color={Colors.Red}>
+                    @Robin
+                  </A>{' '}
+                  since 2014,
                   <br />
-                  where I <Span color={Colors.Orange}>shape & build</Span> WorkTech products
+                  where I <Span color={Colors.Orange}>shape & build</Span>{' '}
+                  WorkTech products
                 </>
                 <>
-                  Adventuring in <A href={links.ig} color={Colors.Red}>4 wheel drive</A>,
-                  <br/>
-                  where I <Span color={Colors.Orange}>discover & explore</Span> Canada🇨🇦
+                  Adventuring in{' '}
+                  <A href={links.ig} color={Colors.Red}>
+                    4 wheel drive
+                  </A>
+                  ,
+                  <br />
+                  where I <Span color={Colors.Orange}>
+                    discover & explore
+                  </Span>{' '}
+                  Canada🇨🇦
                 </>
                 <>
-                  Nerding out on <A href={links.gh} color={Colors.Red}>@Github</A> & <A href={links.tw} color={Colors.Blue}>@Twitter</A>,
-                  <br/>
-                  where we share <Span color={Colors.Orange}>knowledge & contribute</Span>
+                  Nerding out on{' '}
+                  <A href={links.gh} color={Colors.Red}>
+                    @Github
+                  </A>{' '}
+                  &{' '}
+                  <A href={links.tw} color={Colors.Blue}>
+                    @Twitter
+                  </A>
+                  ,
+                  <br />
+                  where we share{' '}
+                  <Span color={Colors.Orange}>knowledge & contribute</Span>
                 </>
               </TextLoop>
             </P>
             <br />
             <P size="md">
-              <A href="https://fs.blog/mental-models/">Mental Models</A>
-              {' '}&middot;{' '}
-              <A href="https://basecamp.com/shapeup/webbook">Shape Up</A>
-              {' '}&middot;{' '}
-              <A href="https://en.wikipedia.org/wiki/Domain-driven_design">Domain Driven Design</A>
+              <A href="https://fs.blog/mental-models/">Mental Models</A>{' '}
+              &middot;{' '}
+              <A href="https://basecamp.com/shapeup/webbook">Shape Up</A>{' '}
+              &middot;{' '}
+              <A href="https://en.wikipedia.org/wiki/Domain-driven_design">
+                Domain Driven Design
+              </A>
             </P>
             <Socials />
           </div>
@@ -101,7 +135,10 @@ export function Home() {
             ) : storyIndex === 1 ? (
               <Jeep />
             ) : (
-              <Span color={Colors.Red} style={{fontSize: 246, fontWeight: 'bold'}}>
+              <Span
+                color={Colors.Red}
+                style={{ fontSize: 246, fontWeight: 'bold' }}
+              >
                 {`</>`}
               </Span>
             )}

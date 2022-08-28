@@ -1,8 +1,5 @@
 export function DeskDemo() {
-  return (
-    <div dangerouslySetInnerHTML={{__html: svg}} />
-
-  )
+  return <div dangerouslySetInnerHTML={{ __html: svg }} />;
 }
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" preserveAspectRatio="xMidYMid meet" style="width: 100%; height: 100%; transform: translate3d(0px, 0px, 0px);">

@@ -4,25 +4,17 @@ import { ReactNode } from 'react';
 import 'highlight.js/styles/github.css';
 
 const ResponsiveImage = (props: any) => (
-  <Image
-    alt={props.alt}
-    layout="responsive"
-    {...props}
-  />
+  <Image alt={props.alt} layout="responsive" {...props} />
 );
 
 const components = {
-  img: ResponsiveImage
+  img: ResponsiveImage,
 };
 
 type Props = {
   children: ReactNode;
-}
+};
 
-export function MDXProvider ({ children }: Props): JSX.Element {
-  return (
-    <BaseMDXProvider components={components}>
-      {children}
-    </BaseMDXProvider>
-  )
+export function MDXProvider({ children }: Props): JSX.Element {
+  return <BaseMDXProvider components={components}>{children}</BaseMDXProvider>;
 }

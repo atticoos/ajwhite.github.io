@@ -4,20 +4,23 @@ type GlobalStaticProps = {
   props: {
     headerData: {
       googleAnalyticsId?: string | null;
-    }
-  }
+    };
+  };
 };
 
 export function withGlobalStaticProps(
-  staticPropsFn?: (context: GetStaticPropsContext, globalProps: GlobalStaticProps) => any | Promise<any>
+  staticPropsFn?: (
+    context: GetStaticPropsContext,
+    globalProps: GlobalStaticProps
+  ) => any | Promise<any>
 ) {
   return async (context: GetStaticPropsContext) => {
     const globalProps = {
       props: {
         headerData: {
-          googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID || null
-        }
-      }
+          googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID || null,
+        },
+      },
     };
 
     if (!staticPropsFn) {
@@ -25,5 +28,5 @@ export function withGlobalStaticProps(
     }
 
     return await staticPropsFn(context, globalProps);
-  }
+  };
 }

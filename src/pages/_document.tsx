@@ -1,11 +1,15 @@
-import { Html, Head, Main, NextScript } from "next/document";
-import { GoogleAnalytics } from "../components";
+import { Html, Head, Main, NextScript } from 'next/document';
+import { GoogleAnalytics } from '../components';
 
 export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <link href="https://fonts.googleapis.com/css?family=Raleway:400,600|Open+Sans:400,300,700,600&display=swap" rel="stylesheet" type="text/css" />
+        <link
+          href="https://fonts.googleapis.com/css?family=Raleway:400,600|Open+Sans:400,300,700,600&display=swap"
+          rel="stylesheet"
+          type="text/css"
+        />
         <link rel="shortcut icon" href="/static/favicon.png" />
       </Head>
       <body>
@@ -13,5 +17,5 @@ export default function Document() {
         <NextScript />
       </body>
     </Html>
-  )
+  );
 }

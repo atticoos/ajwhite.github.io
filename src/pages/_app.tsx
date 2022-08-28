@@ -1,11 +1,11 @@
-import '../styles/globals.css'
-import '@fortawesome/fontawesome-svg-core/styles.css'
-import type { AppProps, NextWebVitalsMetric } from 'next/app'
+import '../styles/globals.css';
+import '@fortawesome/fontawesome-svg-core/styles.css';
+import type { AppProps, NextWebVitalsMetric } from 'next/app';
 import Head from 'next/head';
 import { MDXProvider, GoogleAnalytics } from '../components';
 import { reportWebVitals } from '../utils';
 
-function MyApp({ Component, pageProps}: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
@@ -14,13 +14,11 @@ function MyApp({ Component, pageProps}: AppProps) {
       <MDXProvider>
         <Component {...pageProps} />
       </MDXProvider>
-      <GoogleAnalytics
-        googleAnalyticsId={process.env.GOOGLE_ANALYTICS_ID}
-      />
+      <GoogleAnalytics googleAnalyticsId={process.env.GOOGLE_ANALYTICS_ID} />
     </>
   );
 }
 
 export { reportWebVitals };
 
-export default MyApp
+export default MyApp;

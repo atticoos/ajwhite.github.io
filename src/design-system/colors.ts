@@ -5,4 +5,4 @@ export const Colors = {
   Orange: '#ffaf00',
   Blue: '#2f94cc',
   Purple: '#374785',
-}
+};

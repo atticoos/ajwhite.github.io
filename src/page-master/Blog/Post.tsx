@@ -5,7 +5,7 @@ type PostMeta = {
   date: string;
   permalink: string;
   project?: string;
-  tags?: string[]
+  tags?: string[];
   excerpt?: string;
   seo_title?: string;
   seo_description?: string;
@@ -14,13 +14,9 @@ type PostMeta = {
 type Props = {
   meta?: PostMeta;
   children?: ReactNode;
-}
+};
 
-export function Post ({meta, children}: Props): JSX.Element {
-  console.log('meta!', meta)
-  return (
-    <>
-      {children}
-    </>
-  )
+export function Post({ meta, children }: Props): JSX.Element {
+  console.log('meta!', meta);
+  return <>{children}</>;
 }
