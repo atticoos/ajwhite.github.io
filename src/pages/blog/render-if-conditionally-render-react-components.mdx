@@ -1,3 +1,5 @@
+import { Post } from '../../page-master/Blog';
+
 export const meta = {
   title: 'renderIf - Conditionally render React components',
   date: '2016-02-04 18:00:00',
@@ -286,3 +288,5 @@ class MyComponent extends Component {
 ```
 
 You can find this project <a href="https://github.com/ajwhite/render-if" target="_blank" title="RenderIf - Conditionally render React components">on Github</a>.
+
+export default ({ children }) => <Post meta={meta}>{children}</Post>
