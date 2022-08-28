@@ -1,13 +1,10 @@
 import styled from '@emotion/styled'
-import { keyframes } from '@emotion/react';
 import Image from 'next/image';
-import {m, motion} from 'framer-motion';
 import { useMemo, useState } from 'react';
 import { useInterval } from 'usehooks-ts';
-import { A, P, H2, Span, TextLoop } from '../../components';
 import { Colors } from '../../design-system';
-import { DotCanvas, Socials } from './components';
-import { DeskDemo } from './components/DeskDemo';
+import { A, P, Span, TextLoop } from '../../components';
+import { DotCanvas, Jeep, StoryNav, Socials } from './components';
 
 const textShadow = {
   textShadow: '1px 2px 4px rgba(150, 150, 150, 0.4)'
@@ -38,7 +35,11 @@ export function Home() {
       <Center>
         <Content>
           <div style={{width: 640}}>
-            <StoryNav count={numStories} selectedIndex={storyIndex} onIndexSelected={onIndexSelected} />
+            <StoryNav
+              count={numStories}
+              selectedIndex={storyIndex}
+              onIndexSelected={onIndexSelected}
+            />
             <P size="xl" style={{...textShadow, marginBottom: -12}}>
               {`I'm`} <strong><Span color={Colors.Red}>Atticus White</Span></strong>,
               <br />
@@ -90,55 +91,15 @@ export function Home() {
           <Preview>
             {storyIndex === 0 ? (
               <>
-                {/* <Image
-                  src="/static/images/robin-office.png"
-                  width={550}
-                  height={550}
-                  // width={856 * 0.7}
-                  // height={856 * 0.7}
-                  style={{
-                    borderRadius: '25%'
-                    // boxShadow: '1px 2px 10px rgba(0, 0, 0, 0.3)'
-                  }}
-                /> */}
                 <Image
-                  src="https://assets-global.website-files.com/5ff621612284ed8ec04c11c9/5ff621612284eddae04c1402_Room_display_gif1.gif"
+                  src="/static/images/robin-room-display.gif"
                   height={580 * 0.65}
                   width={760 * 0.65}
                   layout="intrinsic"
                 />
               </>
             ) : storyIndex === 1 ? (
-              <motion.div
-                transition={{
-                  repeat: Infinity,
-                  duration: 1.5,
-                  ease: 'linear'
-                }}
-                style={{transform: rot(13)}}
-                animate={{
-                  transform: [
-                    `${rot(13)} ${y(0)}`,
-                    `${rot(12.5)} ${y(0.5)}`,
-                    `${rot(12)} ${y(1)}`,
-                    `${rot(12.5)} ${y(1.5)}`,
-                    `${rot(12)} ${y(1.8)}`,
-                    `${rot(11)} ${y(1.4)}`,
-                    `${rot(12)} ${y(1)}`,
-                    `${rot(12.6)} ${y(0.5)}`,
-                    `${rot(13)} ${y(0)}`,
-                    `${rot(14)} ${y(-0.5)}`,
-                    `${rot(13)} ${y(0)}`,
-                  ]
-                }}
-              >
-                <Image
-                  src="/static/images/jeep-logo.png"
-                  height={340}
-                  width={340}
-                  layout="intrinsic"
-                />
-              </motion.div>
+              <Jeep />
             ) : (
               <Span color={Colors.Red} style={{fontSize: 246, fontWeight: 'bold'}}>
                 {`</>`}
@@ -151,88 +112,12 @@ export function Home() {
   );
 }
 
-const StoryNav = ({
-  count,
-  selectedIndex,
-  onIndexSelected
-}: {
-  count: number,
-  selectedIndex: number,
-  onIndexSelected: (i: number) => void
-}) => {
-  const range = useMemo(
-    () => Array.from(new Array(count)).map((_, i) => i),
-    [count]
-  )
-  return (
-    <div style={{
-      display: 'flex'
-    }}>
-      {range.map(i => (
-        <Dot
-          key={i}
-          selected={i === selectedIndex}
-          onClick={() => onIndexSelected(i)}
-        />
-      ))}
-    </div>
-  )
-}
-
-const Dot = styled.div<{selected: boolean}>`
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  margin-right: 8px;
-  // box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.4);
-  cursor: pointer;
-  transition-duration: 0.3s;
-  background-color: ${({ selected }) => selected
-    ? Colors.Black
-    : Colors.Gray};
-  &:hover {
-    transform: scale(1.2);
-  }
-`;
-
-const StatusBoard = () => (
-  <Image
-    src="/static/images/status-board.png"
-    width={632}
-    height={632}
-  />
-)
-
 const Preview = styled.div`
   position: relative;
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: center;
-`;
-
-const y = (val: number): string => `translateY(${val}%)`
-const rot = (deg: number): string => `rotate(${deg}deg)`
-
-const bouncy = keyframes`
-from, 20%, 53%, 80%, to {
-  transform: translate3d(0,0,0);
-}
-
-40%, 43% {
-  transform: translate3d(0, -30px, 0);
-}
-
-70% {
-  transform: translate3d(0, -15px, 0);
-}
-
-90% {
-  transform: translate3d(0,-4px,0);
-}
-`;
-const BouncyImage = styled(Image)`
-  animate: ${bouncy} 1s ease infinite;
 `;
 
 const Center = styled.div`
