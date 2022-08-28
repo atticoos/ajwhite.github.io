@@ -3,7 +3,7 @@ import jQuery from 'jquery';
 export default (function ($) {
   var MAX_DIAMETER = 30;
   var VELOCITY = 0.8;
-  var DOT_COUNT = 25;
+  var DOT_COUNT = 32;
   var COLOR = '#e0e6ed';
   var COLORS = ['#FF9900', '#424242', '#BCBCBC', '#3299BB'];
 

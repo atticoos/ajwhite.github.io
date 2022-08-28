@@ -161,7 +161,7 @@ const Story = styled.div`
 const Preview = styled.div`
   position: relative;
   display: flex;
-  flex: 1;
+  flex: 0.6;
   align-items: center;
   justify-content: center;
 
@@ -173,7 +173,7 @@ const Preview = styled.div`
 const Center = styled.div`
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   flex: 1;
@@ -187,12 +187,12 @@ const Center = styled.div`
 const Content = styled.section`
   display: flex;
   flex: 1;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   height: 420px;
 
   @media only screen and (min-width: 1200px) {
-    width: 1200px;
+    // width: 1200px;
     // width: 640px;
     // margin-left: 80px;
   }
