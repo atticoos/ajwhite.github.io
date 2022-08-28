@@ -13,6 +13,7 @@ const nextConfig = withMDX({
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
   reactStrictMode: true,
   swcMinify: true,
+  trailingSlash: true,
   experimental: {
     images: {
       unoptimized: true
