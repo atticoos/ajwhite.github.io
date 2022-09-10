@@ -62,9 +62,9 @@ export function Home() {
               {' based '}
               <strong>
                 <TextLoop index={storyIndex}>
-                  <Span color={Colors.Orange}>👨‍💻 Developer</Span>
-                  <Span color={Colors.Orange}>🚜 Jeeper</Span>
-                  <Span color={Colors.Orange}>🖥️ Technologist</Span>
+                  <Span color={Colors.Orange}>Developer</Span>
+                  <Span color={Colors.Orange}>Jeeper</Span>
+                  <Span color={Colors.Orange}>Technologist</Span>
                 </TextLoop>
               </strong>
             </P>
@@ -104,8 +104,8 @@ export function Home() {
                   </A>
                   ,
                   <br />
-                  where we share{' '}
-                  <Span color={Colors.Orange}>knowledge & contribute</Span>
+                  sharing{' '}
+                  <Span color={Colors.Orange}>knowledge & contributing</Span>
                 </>
               </TextLoop>
             </P>
@@ -125,6 +125,18 @@ export function Home() {
           <Preview>
             {storyIndex === 0 ? (
               <>
+                {/* <Image
+                  src="/static/images/status-board.png"
+                  layout="intrinsic"
+                  height={682}
+                  width={682}
+                /> */}
+                {/* <Image
+                  src="/static/images/status-board-display.png"
+                  layout="intrinsic"
+                  width={2000}
+                  height={1275}
+                /> */}
                 <Image
                   src="/static/images/robin-room-display.gif"
                   height={580 * 0.65}
@@ -164,6 +176,7 @@ const Preview = styled.div`
   flex: 0.6;
   align-items: center;
   justify-content: center;
+  padding: 20px 20px 20px 80px;
 
   @media only screen and (max-width: 1200px) {
     display: none;

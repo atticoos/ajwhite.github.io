@@ -6,7 +6,7 @@ export function Jeep() {
     <motion.div
       transition={{
         repeat: Infinity,
-        duration: 1.5,
+        duration: 3,
         ease: 'linear',
       }}
       style={{ transform: rot(13) }}
