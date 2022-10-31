@@ -18,5 +18,5 @@ type Props = {
 
 export function Post({ meta, children }: Props): JSX.Element {
   console.log('meta!', meta);
-  return <>{children}</>;
+  return <><h1>Test</h1>{children}</>;
 }
